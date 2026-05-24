@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TAMIS-3.1 时空-聚合道德直觉谱系测试</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --paper: rgba(255,255,255,.88);
+      --paper-strong: #ffffff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: rgba(20, 30, 55, .12);
+      --brand: #4f46e5;
+      --brand2: #06b6d4;
+      --good: #0f9f6e;
+      --warn: #d97706;
+      --bad: #dc2626;
+      --shadow: 0 20px 60px rgba(30, 41, 59, .12);
+      --radius: 22px;
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(900px 500px at 8% -10%, rgba(79,70,229,.16), transparent 62%),
+        radial-gradient(800px 460px at 92% 0%, rgba(6,182,212,.16), transparent 60%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg) 45%, #f3f5fb 100%);
+      min-height: 100vh;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .app { max-width: 1180px; margin: 0 auto; padding: 28px 18px 72px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      position: sticky; top: 0; z-index: 20;
+      padding: 12px 0 18px;
+      backdrop-filter: blur(14px);
+    }
+    .brand { display:flex; align-items:center; gap: 12px; min-width: 0; }
+    .logo {
+      width: 42px; height: 42px; border-radius: 15px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 10px 26px rgba(79,70,229,.22);
+      display:grid; place-items:center; color:#fff; font-weight:900; letter-spacing:.02em;
+    }
+    .brand h1 { margin: 0; font-size: 18px; line-height: 1.1; }
+    .brand small { color: var(--muted); display: block; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pill { display:inline-flex; align-items:center; gap: 7px; border: 1px solid var(--line); background: var(--paper); color: var(--muted); border-radius: 999px; padding: 8px 12px; font-size: 13px; }
+    .btns { display:flex; gap: 10px; align-items:center; flex-wrap: wrap; justify-content: flex-end; }
+    .btn {
+      border: 0; border-radius: 14px; padding: 11px 15px;
+      background: #eef2ff; color: #312e81; font-weight: 700;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease, opacity .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(79,70,229,.12); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn.primary { color:#fff; background: linear-gradient(135deg, var(--brand), var(--brand2)); }
+    .btn.ghost { background: var(--paper); color: var(--muted); border: 1px solid var(--line); }
+    .btn.danger { background: #fff1f2; color: #be123c; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 20px; align-items:start; }
+    .hero, .card, .side {
+      background: var(--paper); border: 1px solid rgba(255,255,255,.68); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .hero { padding: 32px; overflow: hidden; position: relative; }
+    .hero:before { content:""; position:absolute; width: 360px; height: 360px; border-radius: 999px; right:-110px; top:-160px; background: radial-gradient(circle, rgba(79,70,229,.16), transparent 64%); }
+    .hero h2 { font-size: clamp(30px, 5vw, 56px); line-height: 1.02; margin: 10px 0 16px; letter-spacing: -0.04em; max-width: 820px; }
+    .hero p { color: var(--muted); line-height: 1.85; margin: 0 0 16px; font-size: 16px; max-width: 900px; }
+    .stats { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 24px 0; }
+    .stat { background: rgba(255,255,255,.72); border: 1px solid var(--line); border-radius: 18px; padding: 16px; }
+    .stat b { display:block; font-size: 26px; }
+    .stat span { color: var(--muted); font-size: 13px; }
+    .assumptions { display:grid; gap: 9px; margin-top: 18px; }
+    .assumption { display:flex; gap: 10px; align-items:flex-start; background: rgba(248,250,252,.88); border:1px solid var(--line); padding: 11px 12px; border-radius: 16px; color: #344054; line-height: 1.6; }
+    .assumption em { flex:0 0 auto; display:grid; place-items:center; width:24px; height:24px; border-radius:9px; color:#fff; background: linear-gradient(135deg, var(--brand), var(--brand2)); font-style:normal; font-size:12px; font-weight:800; }
+    .card { padding: 22px; }
+    .question-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom: 16px; }
+    .qid { color: var(--brand); font-weight: 900; letter-spacing: .02em; }
+    .qtype { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .question { font-size: 24px; line-height: 1.45; font-weight: 850; letter-spacing: -.02em; margin: 6px 0 18px; }
+    .options { display:grid; gap: 12px; }
+    .option {
+      width:100%; text-align:left; border: 1px solid var(--line); border-radius: 18px; padding: 16px;
+      background: rgba(255,255,255,.72); color: var(--ink);
+      display:flex; gap: 14px; align-items:flex-start;
+    }
+    .option:hover { border-color: rgba(79,70,229,.42); box-shadow: 0 12px 28px rgba(30,41,59,.08); }
+    .option.selected { border-color: rgba(79,70,229,.72); background: linear-gradient(180deg, #eef2ff, #fff); box-shadow: 0 12px 34px rgba(79,70,229,.14); }
+    .letter, .score-dot { flex:0 0 auto; width: 34px; height: 34px; display:grid; place-items:center; border-radius: 12px; background:#eef2ff; color:#3730a3; font-weight:900; }
+    .option.selected .letter, .option.selected .score-dot { color:#fff; background: linear-gradient(135deg, var(--brand), var(--brand2)); }
+    .option p { margin: 4px 0 0; line-height: 1.65; }
+    .likert-grid { display:grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px; }
+    .likert-grid .option { display:grid; place-items:center; text-align:center; min-height: 108px; padding: 14px 10px; }
+    .likert-grid .score-dot { margin-bottom: 8px; }
+    .hint { color: var(--muted); line-height: 1.7; font-size: 14px; }
+    .analysis-box { margin-top: 18px; border: 1px dashed rgba(79,70,229,.35); border-radius: 18px; padding: 14px 16px; background: rgba(238,242,255,.55); }
+    details summary { cursor:pointer; font-weight:800; color:#3730a3; }
+    details p { margin: 10px 0 0; color: #475467; line-height: 1.7; }
+    .navline { display:flex; justify-content:space-between; align-items:center; gap: 12px; margin-top: 18px; flex-wrap:wrap; }
+    .progress-wrap { margin: 10px 0 18px; }
+    .progress-meta { display:flex; justify-content:space-between; color: var(--muted); font-size: 13px; margin-bottom: 8px; gap: 10px; }
+    .progress { height: 12px; background: #e9edf7; border-radius: 999px; overflow:hidden; }
+    .progress > div { height: 100%; background: linear-gradient(90deg, var(--brand), var(--brand2)); border-radius: inherit; width: 0%; transition: width .25s ease; }
+    .side { padding: 18px; position: sticky; top: 82px; }
+    .side h3 { margin: 0 0 10px; font-size: 15px; }
+    .section-tabs { display:grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .tab { border:1px solid var(--line); background:#fff; color:var(--muted); border-radius: 13px; padding: 10px; font-weight: 800; }
+    .tab.active { background:#eef2ff; color:#3730a3; border-color: rgba(79,70,229,.3); }
+    .grid-nav { display:grid; grid-template-columns: repeat(10, 1fr); gap: 6px; max-height: 330px; overflow:auto; padding-right: 4px; }
+    .jump { border:1px solid var(--line); background:#fff; border-radius: 10px; height: 30px; font-size: 12px; color: var(--muted); }
+    .jump.answered { background: #ecfdf5; color:#047857; border-color: rgba(16,185,129,.3); }
+    .jump.current { outline: 3px solid rgba(79,70,229,.18); border-color: rgba(79,70,229,.65); color:#3730a3; }
+    .mini-list { display:grid; gap: 8px; margin-top: 14px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events:none; transition: .2s ease; background: rgba(17,24,39,.92); color:#fff; padding: 12px 16px; border-radius: 999px; z-index: 50; box-shadow: 0 16px 40px rgba(0,0,0,.18); }
+    .toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+    .report { display:grid; gap: 18px; }
+    .report-head { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+    .report-title h2 { margin: 0 0 8px; font-size: 34px; letter-spacing: -.03em; }
+    .summary { display:grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .summary .stat b { font-size: 21px; }
+    .panel { background: var(--paper); border: 1px solid rgba(255,255,255,.72); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; }
+    .panel h3 { margin:0 0 12px; font-size: 18px; }
+    .dim-table { width:100%; border-collapse: collapse; }
+    .dim-table th, .dim-table td { padding: 12px 10px; border-bottom:1px solid var(--line); vertical-align: top; text-align:left; }
+    .dim-table th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing:.04em; }
+    .code { font-weight:900; color:#3730a3; }
+    .barline { min-width: 120px; height: 10px; background:#e9edf7; border-radius:999px; overflow:hidden; margin-top: 5px; }
+    .barline > i { display:block; height:100%; border-radius:inherit; background: linear-gradient(90deg, var(--brand), var(--brand2)); }
+    .num { font-variant-numeric: tabular-nums; font-weight: 850; }
+    .level { display:inline-flex; align-items:center; border-radius:999px; padding: 3px 8px; background:#f2f4f7; color:#475467; font-size:12px; font-weight:800; }
+    .level.high { background:#ecfdf5; color:#047857; }
+    .level.low { background:#fff1f2; color:#be123c; }
+    .cards { display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .metric { border:1px solid var(--line); border-radius:18px; padding: 14px; background:#fff; }
+    .metric .name { color:#344054; font-weight: 850; margin-bottom: 8px; }
+    .contrast { display:grid; grid-template-columns: 1fr auto; gap: 12px; align-items:center; border-bottom:1px solid var(--line); padding: 11px 0; }
+    .signed { width: 210px; height: 12px; background: linear-gradient(90deg,#e0e7ff 0 50%,#cffafe 50% 100%); border-radius:999px; position: relative; overflow:hidden; }
+    .signed:after { content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; background:rgba(15,23,42,.32); }
+    .signed i { position:absolute; top:0; bottom:0; background:rgba(79,70,229,.62); }
+    .list { display:grid; gap: 10px; }
+    .list-item { border:1px solid var(--line); background:#fff; border-radius:16px; padding: 13px 14px; line-height:1.65; }
+    .answer-review { display:grid; gap: 10px; }
+    .review-item { border:1px solid var(--line); border-radius:16px; padding: 13px; background:#fff; }
+    .review-item strong { color:#3730a3; }
+    .review-item small { color:var(--muted); display:block; margin-top: 6px; line-height:1.6; }
+    .hidden { display:none !important; }
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .side { position: static; }
+      .summary { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .topbar { align-items:flex-start; flex-direction:column; }
+      .hero { padding: 22px; }
+      .stats, .summary, .cards { grid-template-columns: 1fr; }
+      .likert-grid { grid-template-columns: 1fr; }
+      .question { font-size: 20px; }
+      .dim-table { display:block; overflow-x:auto; }
+      .grid-nav { grid-template-columns: repeat(8, 1fr); }
+      .brand small { white-space: normal; }
+    }
+    @media print {
+      body { background: white; } .topbar, .side, .btns, .navline, .toast { display:none !important; }
+      .app { padding:0; max-width:none; } .panel, .card, .hero { box-shadow:none; border:1px solid #ddd; break-inside:avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">T3</div>
+        <div>
+          <h1>TAMIS-3.1 网页测试</h1>
+          <small>本地保存进度 · 可回退修改 · 浏览器端计分 · 支持下载报告</small>
+        </div>
+      </div>
+      <div class="btns">
+        <span class="pill" id="saveStatus">尚未开始</span>
+        <button class="btn ghost" id="homeBtn" type="button">首页</button>
+        <button class="btn ghost" id="reportTopBtn" type="button">查看报告</button>
+        <button class="btn danger" id="resetBtn" type="button">清空进度</button>
+      </div>
+    </header>
+
+    <main id="introView" class="hero">
+      <span class="pill">离线单文件 · 数据只保存在当前浏览器 localStorage</span>
+      <h2>时空-聚合道德直觉谱系测试</h2>
+      <p id="notice"></p>
+      <div class="stats">
+        <div class="stat"><b id="mcqCount">60</b><span>四选一冲突题</span></div>
+        <div class="stat"><b id="likertCount">72</b><span>1~5 原则认同题</span></div>
+        <div class="stat"><b id="dimCount">18</b><span>规范直觉维度</span></div>
+      </div>
+      <div class="btns" style="justify-content:flex-start; margin-bottom: 16px;">
+        <button class="btn primary" id="startBtn" type="button">开始 / 继续测试</button>
+        <button class="btn ghost" id="demoBtn" type="button">随机演示报告</button>
+      </div>
+      <p class="hint">建议一次完成，但可以随时关闭页面；已选答案会自动保存在本机浏览器。若要换设备或换浏览器，请先下载报告或答题数据。</p>
+      <h3 style="margin-top:28px;">关键前提</h3>
+      <div class="assumptions" id="assumptions"></div>
+    </main>
+
+    <main id="testView" class="layout hidden">
+      <section>
+        <div class="progress-wrap card" style="margin-bottom:20px;">
+          <div class="progress-meta"><span id="progressText">进度</span><span id="sectionText">四选一题</span></div>
+          <div class="progress"><div id="progressBar"></div></div>
+        </div>
+        <article class="card" id="questionCard"></article>
+      </section>
+      <aside class="side">
+        <h3>题目导航</h3>
+        <div class="section-tabs">
+          <button type="button" class="tab active" id="mcqTab">四选一</button>
+          <button type="button" class="tab" id="likertTab">评分题</button>
+        </div>
+        <div class="grid-nav" id="jumpGrid"></div>
+        <div class="mini-list">
+          <div>绿色：已作答；紫色描边：当前题。</div>
+          <div>题目可跳转，答案可反复修改。提交前不会上传任何内容。</div>
+        </div>
+      </aside>
+    </main>
+
+    <main id="reportView" class="report hidden"></main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script type="application/json" id="tamis-data">{"meta":{"title":"TAMIS-3.1 时空-聚合道德直觉谱系测试","subtitle":"Temporal-Aggregative Moral Intuition Inventory v3.1","notice":"本测试是规范直觉结构反思工具，不是经心理测量学验证的临床、人格、政治或伦理诊断。分数只在本题库内部有解释意义。","source":"tamis3_1_improved(1).py","counts":{"mcq":60,"likert":72,"dimensions":18}},"dimensions":[["CON","后果主义 / 总体福利最优化"],["AGG","跨主体聚合主义"],["DNT","义务论 / 权利边界"],["AUT","自主权 / 知情同意 / 可撤回授权"],["INT","意图、手段、行动方式敏感性"],["PRI","优先主义 / 最差者优先"],["EQL","平等主义 / 程序公平 / 负担公平"],["DES","应得、责任、归责"],["PAR","行动者相对性 / 特殊关系 / 特殊义务"],["EXP","体验实在论"],["TIM","主观时间承认"],["IDN","个人同一性 / 心理连续性"],["REC","记忆保留依赖"],["NAR","叙事整合 / 人生整体依赖"],["OUT","后续影响 / 因果痕迹依赖"],["SEV","严重性非线性 / 最大负担最小化"],["RSK","灾难尾部风险规避"],["POP","人口伦理 / 创造主体谨慎性"]],"dimensionDescriptions":{"CON":"越高，越倾向于根据总体福利、总体痛苦、总体好处来判断。","AGG":"越高，越倾向于把不同主体的痛苦或快乐相加比较。","DNT":"越高，越认为权利、人格边界、禁止性规则不能轻易被好结果压倒。","AUT":"越高，越认为知情同意、自主选择、撤回授权具有核心道德意义。","INT":"越高，越重视主动/被动、作为手段/副作用、意图/预见之间的区别。","PRI":"越高，越优先考虑处境最差、即将最惨、或承受最重痛苦者。","EQL":"越高，越重视公平分配、抽签、程序平等和少数者保护。","DES":"越高，越重视责任、过错、承诺、应得和归责。","PAR":"越高，越承认自己、亲近者、承诺对象、角色关系具有额外权重。","EXP":"越高，越认为体验发生时本身就有道德重量，即使之后失忆或无人知道。","TIM":"越高，越承认主观经历时长本身重要，不被外部时间短暂所取消。","IDN":"越高，越重视未来自己、心理连续体、复制体与当前自己的连续关系。","REC":"越高，越认为能否记住经历会显著影响福利重量。","NAR":"越高，越认为经历是否进入人生叙事、人格计划、人生整体评价很重要。","OUT":"越高，越认为后续影响、因果痕迹、社会记录、长期后果决定福利重量。","SEV":"越高，越认为极端强度或超长负担不能与许多轻微好处简单线性折算。","RSK":"越高，越倾向于规避低概率但极端严重的尾部灾难，而不只看期望值。","POP":"越高，越谨慎对待创造新主体、短暂主体和无法同意其存在条件的主体。"},"assumptions":["除非题目另有说明，痛苦、囚禁、快乐均指主体实际清醒经历到的主观体验；主体不会死亡，也不会因生理极限中断体验。","若题目说外部世界只过一瞬间，主观时间仍完整发生；若题目说外部机会损失，则该损失也按题干计入。","若题目说删除记忆且无后续影响，假定没有创伤后遗症、身体损伤、社会后果、隐藏副作用或未来行为改变。","除非题目另有说明，受影响者同样无辜、痛苦强度按文字设定相同或可比；‘轻微/中等/严重/极端’只是思想实验锚点，不表示现实医学量表。","题目中的‘知情同意’默认包括充分信息、理解能力、无欺骗、无胁迫；若可撤回性是争议点，题干或选项会单独说明。","题目中的‘主体’默认具有清醒体验能力；若题目讨论非人类、数字系统或意识不确定，会明确标出不确定性。","人口伦理题不是在讨论现实生育政策，而是在设定成立时询问创造新体验主体的规范理由。","题目不是问现实法律、技术或政策是否可行，而是在设定成立时询问你的规范判断。","四选一题要求在冲突中选最接近的一项；未选某维度不等于否认该维度。1~5 题用于表达独立原则认同度。"],"mcqItems":[{"id":"M01","prompt":"失控电车将撞向 5 个同样无辜的人；你可以拉杆使其转向另一轨道，改为撞向 1 个同样无辜的人。两边伤害类型相同且无人事先同意。你怎么选？","options":[{"letter":"A","text":"拉杆，减少总伤害。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"B","text":"不拉杆，不能主动改变轨道使无辜者受害。","scores":{"DNT":2.0,"INT":1.0}},{"letter":"C","text":"只有被转向伤害者事先充分知情并同意时才可拉杆。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"如果不认为人数本身可直接决定，应采用正当、公平的决策程序或随机机制。","scores":{"EQL":2.0}}],"analysis":"本题测量最经典的总体伤害最小化、主动介入禁忌、同意约束与程序公平之间的第一反应。它不区分杀害和伤害程度的细节，适合做基准题。 v3.1 消歧：明确受害者同样无辜、伤害同类；修正‘各方主张相等’的歧义。","scoringRationale":"A 给 CON/AGG；B 给 DNT/INT；C 给 AUT/DNT；D 给 EQL。四选一只反映冲突中优先项，不表示未选维度被否定。"},{"id":"M02","prompt":"若要救 5 人，必须直接把 1 个同样无辜的人当作阻止电车的工具；除非选项明确说同意，否则他并未同意。你怎么判断？","options":[{"letter":"A","text":"可以，只要结果减少总伤害。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"B","text":"不可以，不能把人仅仅当作工具。","scores":{"DNT":2.0,"INT":2.0}},{"letter":"C","text":"只有他充分知情、无胁迫并自愿时可以。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"原则上不可以，但若灾难规模极端巨大可例外。","scores":{"DNT":1.0,"CON":1.0,"SEV":1.0}}],"analysis":"本题把普通转轨题推进到“作为手段”的结构，用于分离单纯后果主义和手段敏感的权利论。D 用于捕捉阈值义务论。 v3.1 消歧：突出‘作为工具’与普通转轨不同，默认不存在有效同意，除非选择同意选项。","scoringRationale":"B 强计 INT/DNT；D 同时给 DNT/CON/SEV，表示规则存在但灾难阈值可能压倒。"},{"id":"M03","prompt":"为避免 100 个无辜者各承受 1 年同等强度痛苦，你可以欺骗 1 个无辜者，使其表面同意承受 1 年同等强度痛苦；若知道真相他不会同意。你怎么看？","options":[{"letter":"A","text":"可以，因为在题设下总痛苦显著减少。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"不可以，欺骗破坏知情同意。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"C","text":"不可以，这是把他作为手段。","scores":{"DNT":2.0,"INT":2.0}},{"letter":"D","text":"灾难足够大时可能例外，但欺骗仍有重大道德成本。","scores":{"CON":1.0,"DNT":1.0,"INT":1.0,"SEV":1.0}}],"analysis":"本题避免把被欺骗称为真正自愿，专门测知情同意、手段化和总体收益的冲突。 v3.1 消歧：补足被救 100 人的痛苦基准，避免 A 选项自行补出‘总痛苦显著减少’。","scoringRationale":"B 重在 AUT；C 重在 INT/DNT；D 是阈值式折中。"},{"id":"M04","prompt":"多数人经投票同意：让少数无辜者承担严重痛苦，以换取多数人各自获得小利益；少数者没有同意。你怎么看？","options":[{"letter":"A","text":"若总福利提高，可以接受。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"不可以，多数程序不能取消少数基本权利。","scores":{"DNT":2.0,"AUT":1.0}},{"letter":"C","text":"不可以，小利益不能压倒少数人的严重痛苦。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"D","text":"程序重要，但必须保护少数者并满足公平条件。","scores":{"EQL":2.0,"DNT":1.0}}],"analysis":"本题测多数程序的边界：民主程序、少数权利、严重性优先和总福利之间的冲突。 v3.1 消歧：区分多数程序、小利益聚合、少数权利和严重性优先。","scoringRationale":"C 将反聚合/严重性优先与权利论分开；D 表示程序公平但不接受裸多数主义。"},{"id":"M05","prompt":"10^9 人各经历一次轻微不适（不会变成创伤或长期损害），能否在道德上压倒 1 人承受一次严重痛苦？","options":[{"letter":"A","text":"可以，数量足够大时可以聚合。","scores":{"AGG":2.0,"CON":2.0}},{"letter":"B","text":"不可以，严重痛苦具有优先性。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"C","text":"有时可以，但轻微不适不能无限聚合。","scores":{"AGG":1.0,"PRI":1.0,"SEV":1.0}},{"letter":"D","text":"取决于是否侵犯基本权利或未经同意。","scores":{"DNT":2.0,"AUT":1.0}}],"analysis":"本题是聚合问题的核心题，直接检测‘很多轻微坏处能否压倒一个严重坏处’。 v3.1 消歧：给轻微与严重体验加锚点，避免只按词语情绪色彩作答。","scoringRationale":"A 强 AGG；B 强 PRI/SEV；C 是有限聚合；D 将权利约束作为首要过滤器。"},{"id":"M06","prompt":"若只按‘痛苦强度 × 主观时长 × 人数’线性计算，两方案总量相同：1 人主观痛苦 1000 年，或 1000 人各主观痛苦 1 年。哪个更坏？","options":[{"letter":"A","text":"大致一样坏，因为线性总量相同。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"B","text":"1 人受 1000 年更坏，极端集中痛苦有额外坏处。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"C","text":"1000 人各 1 年更坏，因为牵涉更多主体。","scores":{"AGG":1.0,"EQL":1.0}},{"letter":"D","text":"应优先看是否有人自愿承担。","scores":{"AUT":2.0}}],"analysis":"本题保持线性总量相同，用来测是否承认最大负担或痛苦集中度的非线性坏处。 v3.1 消歧：说明线性总量是设定而不是被试需要自己计算。","scoringRationale":"A 是线性总量主义；B 是最大负担最小化；C 捕捉人数敏感；D 使同意从数量比较中独立出来。"},{"id":"M07","prompt":"使用同一思想实验强度刻度：A 让 1 人承受强度 10 的痛苦 1 天；B 让 100 人各承受强度 1 的痛苦 1 天。按线性总量 B 更大。你选？","options":[{"letter":"A","text":"选 A，因为线性总量更小。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"B","text":"选 B，因为强度 10 的痛苦有额外严重性。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"C","text":"若强度 10 触及尊严或基本权利底线，应避免 A。","scores":{"DNT":2.0,"SEV":1.0}},{"letter":"D","text":"应让相关者知情选择或抽签。","scores":{"AUT":1.0,"EQL":1.0}}],"analysis":"本题把严重性非线性从时间长度转到强度，避免 SEV 只是在测长期痛苦厌恶。 v3.1 消歧：说明强度等级仅为思想实验刻度，避免理解成现实医学单位。","scoringRationale":"B 给 SEV/PRI；C 给 DNT/SEV，区分权利底线与纯福利非线性。"},{"id":"M08","prompt":"两方案的期望痛苦接近，但分布不同：A 确定让 1 人痛苦 1 年；B 有极小概率让 1 人主观痛苦 10^9 年，且无法可靠排除该尾部。你选？","options":[{"letter":"A","text":"按期望值选，若期望相近则差别不大。","scores":{"CON":2.0}},{"letter":"B","text":"避免极端尾部灾难，选确定较小损失。","scores":{"RSK":2.0,"SEV":1.0}},{"letter":"C","text":"若影响对象相同，应由对象自己决定。","scores":{"AUT":2.0}},{"letter":"D","text":"应设计公平风险分配机制，而非任意指定承担者。","scores":{"EQL":2.0}}],"analysis":"本题测风险尾部规避，而不是单纯严重性；关键是期望值接近但分布形状不同。 v3.1 消歧：明确期望值接近但分布不同，焦点是尾部风险而非算术差异。","scoringRationale":"B 给 RSK/SEV；C 将风险态度和自主选择分离；D 将公平风险分配独立出来。"},{"id":"M09","prompt":"在模型不确定时，方案 A 的最佳估计会减少更多总痛苦，但有小概率造成极端灾难；方案 B 收益较少但几乎无灾难尾部风险。你选？","options":[{"letter":"A","text":"选 A，按最佳期望估计行动。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"选 B，模型不确定时应强烈规避灾难尾部风险。","scores":{"RSK":2.0,"SEV":1.0}},{"letter":"C","text":"只有受风险影响者知情同意时才可选 A。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"若 A 的收益主要帮助最差者，才可能接受。","scores":{"PRI":1.0,"CON":1.0}}],"analysis":"本题加入模型不确定性，测试被试是否把风险规避视为信息不完备下的规范要求。 v3.1 消歧：明确模型不确定与尾部灾难同时存在。","scoringRationale":"B 强 RSK；D 区分‘为普通收益冒险’和‘为最差者冒险’。"},{"id":"M10","prompt":"在无人有特殊责任、亲疏或优先权的情况下，一个危险可平均分给 1000 人（每人极小风险），也可集中给 1 人（较大风险）。两者期望伤害相同。你倾向于？","options":[{"letter":"A","text":"两者期望相同，差别不大。","scores":{"CON":2.0}},{"letter":"B","text":"分散风险更公平。","scores":{"EQL":2.0}},{"letter":"C","text":"避免让一个人承担较大灾难风险。","scores":{"RSK":2.0,"PRI":1.0,"SEV":1.0}},{"letter":"D","text":"应由相关者知情选择风险分配。","scores":{"AUT":2.0}}],"analysis":"本题把期望值固定，用于区分公平分散、尾部风险规避和自主风险选择。 v3.1 消歧：说明各方地位相同，排除责任、亲疏等外部因素。","scoringRationale":"B 是 EQL；C 是 RSK/PRI/SEV；D 是 AUT。"},{"id":"M11","prompt":"外部世界只过一瞬间，但主体内部连续经历了 100 个主观年；除非选项提到，否则不考虑额外外部机会损失。你如何评价这 100 年？","options":[{"letter":"A","text":"应按主体实际经历的 100 个主观年计算。","scores":{"TIM":2.0,"EXP":2.0}},{"letter":"B","text":"若没有记忆、人格变化或后续影响，权重较低。","scores":{"REC":1.0,"NAR":1.0,"OUT":1.0}},{"letter":"C","text":"两者都相关，但主观时间权重更大。","scores":{"TIM":1.0,"EXP":1.0,"OUT":1.0}},{"letter":"D","text":"主要看这 100 年是否进入其人生叙事和自我理解。","scores":{"NAR":2.0,"IDN":1.0}}],"analysis":"本题修正旧版把‘外部时间’误计入 MEM 的问题，明确区分主观时长、后续影响和人生叙事。 v3.1 消歧：区分主观时长、记忆、叙事和外部后果。","scoringRationale":"A 给 TIM/EXP；B 拆成 REC/NAR/OUT；D 给 NAR/IDN。"},{"id":"M12","prompt":"一段痛苦经历结束后被完全删除记忆，且没有创伤后遗症、身体损伤、社会记录或后续行为影响。它是否仍然有道德重量？","options":[{"letter":"A","text":"完全有。痛苦发生时是真实的。","scores":{"EXP":2.0,"TIM":1.0}},{"letter":"B","text":"有，但比会被记住并融入人生的痛苦轻。","scores":{"EXP":1.0,"REC":1.0,"NAR":1.0}},{"letter":"C","text":"只有留下后续影响或改变人生轨迹时才重要。","scores":{"OUT":2.0,"NAR":1.0}},{"letter":"D","text":"若完全不记得也无任何后果，则基本不重要。","scores":{"REC":1.0,"OUT":1.0,"NAR":1.0}}],"analysis":"本题是体验实在论核心题，测痛苦发生本身是否足以构成坏处。 v3.1 消歧：明确无后续影响包括无创伤、无记录、无行为改变。","scoringRationale":"B 不再把记忆、叙事、后果混成单维度；C/D 分别强调后果依赖和综合依赖。"},{"id":"M13","prompt":"一段快乐经历结束后被完全删除记忆，且没有长期收益、社会记录或后续行为影响。它是否仍然对主体有好处？","options":[{"letter":"A","text":"有，快乐发生时是真实的。","scores":{"EXP":2.0,"TIM":1.0}},{"letter":"B","text":"有，但比能记住并融入人生叙事的快乐价值低。","scores":{"EXP":1.0,"REC":1.0,"NAR":1.0}},{"letter":"C","text":"只有改善后续人生时才算明显好。","scores":{"OUT":2.0,"NAR":1.0}},{"letter":"D","text":"若完全不记得也无影响，则基本不算。","scores":{"REC":1.0,"OUT":1.0,"NAR":1.0}}],"analysis":"本题与 M12 平行，用快乐而非痛苦检查回答是否只受痛苦厌恶影响。 v3.1 消歧：与 M12 平行，明确正体验也按同样假设处理。","scoringRationale":"平行题便于观察体验实在论是否对正负体验对称。"},{"id":"M14","prompt":"未来的你将真实经历痛苦，随后完全失忆且无后续影响。你现在是否应保护那个未来阶段的主体？","options":[{"letter":"A","text":"应保护，那仍然是我，且痛苦会被真实经历。","scores":{"IDN":2.0,"EXP":1.0,"TIM":1.0}},{"letter":"B","text":"应保护，但权重可低于会记得的未来痛苦。","scores":{"IDN":1.0,"EXP":1.0,"REC":1.0}},{"letter":"C","text":"即使不是严格同一个我，也仍是完整道德主体。","scores":{"DNT":1.0,"AUT":1.0,"EXP":1.0}},{"letter":"D","text":"若之后我完全不记得，关系很弱。","scores":{"REC":2.0,"IDN":0.5}}],"analysis":"本题把体验实在论和个人同一性区分开：保护未来主体可以基于‘那是我’，也可以基于‘他是主体’。 v3.1 消歧：明确未来主体与当前主体的关系争议是题目焦点。","scoringRationale":"A 给 IDN/EXP；C 给 DNT/AUT/EXP，表示非同一性也不取消道德地位。"},{"id":"M15","prompt":"一个与你心理连续、且本身具有完整清醒体验能力的复制主体将受苦，而原主体获益。复制主体的痛苦是否应被完整计入？","options":[{"letter":"A","text":"完全计入，他是完整体验主体。","scores":{"EXP":2.0,"DNT":1.0}},{"letter":"B","text":"计入，而且心理连续性使它与我特别相关。","scores":{"IDN":2.0,"EXP":1.0}},{"letter":"C","text":"计入一些，但低于原主体本人。","scores":{"IDN":1.0,"PAR":1.0}},{"letter":"D","text":"主要不算作我的损失，因为他不是原来的我。","scores":{"PAR":1.0,"NAR":1.0}}],"analysis":"本题测复制体问题：道德地位、心理连续性和自我偏置是否分离。 v3.1 消歧：明确复制主体本身有完整体验能力，避免把他当作纯数据副本。","scoringRationale":"A 是体验主体平等；B 是连续性增强；C/D 是较强原主体偏置。"},{"id":"M16","prompt":"若复制主体保留你的记忆、性格和计划，且原主体继续存在；复制体本身也是清醒体验主体。你对复制主体的义务更像哪一种？","options":[{"letter":"A","text":"像对另一个完整道德主体一样，不能牺牲他。","scores":{"DNT":2.0,"EXP":1.0}},{"letter":"B","text":"像对未来自己的义务，因为心理连续性很强。","scores":{"IDN":2.0}},{"letter":"C","text":"比陌生人更强，但低于原本的自己。","scores":{"IDN":1.0,"PAR":1.0}},{"letter":"D","text":"主要取决于他是否影响我的现实人生叙事。","scores":{"NAR":2.0,"PAR":1.0}}],"analysis":"本题进一步区分‘完整主体权利’与‘属于我的延续’两种理由。 v3.1 消歧：明确原主体继续存在，复制体不是简单替代。","scoringRationale":"A 给 DNT/EXP；B 给 IDN；D 给 NAR，避免把复制体问题全算进 IDN。"},{"id":"M17","prompt":"你事前完全知道设定：可让自己主观经历 10^8 年囚禁，结束后完全删除记忆并获得巨大现实收益；过程中能否撤回由选项表达。你是否选择？","options":[{"letter":"A","text":"选择。若最终不记得且现实人生极大改善，这交易可接受。","scores":{"REC":1.0,"OUT":2.0,"NAR":1.0}},{"letter":"B","text":"不选择。10^8 年主观痛苦本身极其重要。","scores":{"EXP":2.0,"TIM":2.0,"SEV":1.0}},{"letter":"C","text":"只有充分知情、可撤回且无欺骗时才可能选择。","scores":{"AUT":2.0,"IDN":1.0}},{"letter":"D","text":"若这会摧毁一个阶段性的我，即使终态好也不应选择。","scores":{"IDN":2.0,"EXP":1.0,"SEV":1.0}}],"analysis":"本题集中测主观时间、失忆、终态收益和阶段性自我之间的张力。 v3.1 消歧：明确事前知道设定；可撤回性作为选项分歧而非题干预设。","scoringRationale":"A 用 OUT/NAR/REC 表示终态与后果依赖；B 是强 EXP/TIM/SEV。"},{"id":"M18","prompt":"你必须在两种由你选择导致的方案中选一个：自己承受 1 年主观痛苦，或让 1000 个陌生人各承受 1 天同等强度主观痛苦。你选？","options":[{"letter":"A","text":"自己承受，因为陌生人的总痛苦更大。","scores":{"CON":2.0,"AGG":2.0,"EXP":1.0}},{"letter":"B","text":"让陌生人承受，我可以合理优先自己。","scores":{"PAR":2.0}},{"letter":"C","text":"我可偏向自己，但人数足够多时应自己承担。","scores":{"PAR":1.0,"CON":1.0,"AGG":1.0}},{"letter":"D","text":"应抽签或协商，不能单方转嫁。","scores":{"EQL":2.0,"AUT":1.0}}],"analysis":"本题测行动者相对性：自己是否可被赋予额外权重，以及这种权重是否有数量阈值。 v3.1 消歧：明确是单方选择是否转嫁痛苦，不是自然发生的比较。","scoringRationale":"B 强 PAR；C 是有限 PAR；D 将自利偏置转化为程序/同意问题。"},{"id":"M19","prompt":"你的选择可以让亲近者免受 1 年主观痛苦，但会使 10 个陌生人各承受 1 年同等强度主观痛苦。你选？","options":[{"letter":"A","text":"救亲近者，特殊关系有更高权重。","scores":{"PAR":2.0}},{"letter":"B","text":"不救亲近者，陌生人的痛苦同样重要且人数更多。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"C","text":"特殊关系有权重，但不能压倒很大人数差距。","scores":{"PAR":1.0,"CON":1.0}},{"letter":"D","text":"不能未经同意把痛苦转嫁给陌生人。","scores":{"DNT":2.0,"AUT":1.0}}],"analysis":"本题把自我偏置改为亲近者偏置，检查 PAR 是否只限于自利。 v3.1 消歧：明确痛苦由你的选择转移给陌生人，防止读成自然代价。","scoringRationale":"A/C 分别表示强/有限特殊关系；B 是非人格化聚合；D 是权利约束。"},{"id":"M20","prompt":"你明确承诺保护亲近者免受 1 年痛苦；违背承诺可避免 20 个陌生人各受 1 年同等强度痛苦，且亲近者尚未同意放弃该承诺利益。你倾向于？","options":[{"letter":"A","text":"违背承诺，避免更多总痛苦。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"B","text":"遵守承诺，特殊关系和承诺有独立重量。","scores":{"PAR":2.0,"DES":1.0,"DNT":1.0}},{"letter":"C","text":"人数差距足够大时可违背，但需补偿或解释。","scores":{"CON":1.0,"PAR":1.0,"DES":1.0}},{"letter":"D","text":"先征求亲近者同意，不能单方面牺牲其利益。","scores":{"AUT":2.0,"DNT":1.0}}],"analysis":"本题把特殊关系与承诺责任绑定，测承诺是否能抗衡较大总体利益。 v3.1 消歧：明确亲近者未事后同意被牺牲承诺利益。","scoringRationale":"B 同时给 PAR/DES/DNT；C 是阈值式承诺观。"},{"id":"M21","prompt":"某人因过错造成危险。若需要有人承担解决危险的代价，他是否应在可比例限制内优先承担更多代价？","options":[{"letter":"A","text":"是，责任者应承担更多。","scores":{"DES":2.0}},{"letter":"B","text":"主要看怎样能减少总痛苦。","scores":{"CON":2.0}},{"letter":"C","text":"即使他有错，也不能侵犯其基本权利。","scores":{"DNT":2.0,"AUT":1.0}},{"letter":"D","text":"责任相关，但不能无限加重惩罚。","scores":{"DES":1.0,"DNT":1.0,"SEV":1.0}}],"analysis":"本题测责任与应得是否独立于总量最小化。 v3.1 消歧：把责任承担与惩罚无限化区分。","scoringRationale":"A 强 DES；D 是有限责任观，避免把责任扩展为无限惩罚许可。"},{"id":"M22","prompt":"不能拆分负担时：让 1 个未同意的无辜者承担 1 年痛苦，可避免 1 个责任者承担 2 年同等强度痛苦。你选？","options":[{"letter":"A","text":"让责任者承担 2 年。","scores":{"DES":2.0,"DNT":1.0}},{"letter":"B","text":"让无辜者承担 1 年，总痛苦较少。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"C","text":"不能强迫无辜者，除非他同意。","scores":{"AUT":2.0,"DNT":2.0}},{"letter":"D","text":"若责任者的 2 年极端严重，可考虑例外。","scores":{"PRI":1.0,"CON":1.0,"SEV":1.0}}],"analysis":"本题是责任与总量的直接冲突，且加入无辜者权利作为第三因素。 v3.1 消歧：明确无辜者未同意且不能简单拆分负担。","scoringRationale":"A 是责任优先；B 是总量；C 是权利/同意；D 是严重性阈值。"},{"id":"M23","prompt":"多人在无责任、亲疏、承诺差异的情况下有同等救助主张，但资源只能避免部分人的痛苦。你倾向于？","options":[{"letter":"A","text":"最大化被避免的总痛苦。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"优先帮助处境最差者。","scores":{"PRI":2.0,"SEV":1.0}},{"letter":"C","text":"公平抽签。","scores":{"EQL":2.0}},{"letter":"D","text":"按既有权利、承诺和责任顺序处理。","scores":{"DNT":1.0,"DES":1.0}}],"analysis":"本题测稀缺资源分配中的四种基础原则：效率、最差者、公平程序、既有权利责任。 v3.1 消歧：明确‘同等主张’排除责任、亲疏、承诺差异。","scoringRationale":"各选项基本单纯，适合作为分配模块的锚定题。"},{"id":"M24","prompt":"两人同样需要救助。A 目前处境更惨；B 若不救，最终会变得比 A 更惨。资源只能救一人。你优先？","options":[{"letter":"A","text":"优先救能减少更多总痛苦的一方。","scores":{"CON":2.0}},{"letter":"B","text":"优先当前处境更惨者。","scores":{"PRI":2.0}},{"letter":"C","text":"优先避免最终最惨结果。","scores":{"SEV":2.0,"PRI":1.0}},{"letter":"D","text":"若主张完全相同，应公平抽签。","scores":{"EQL":2.0}}],"analysis":"本题细分 PRI：当前最差者、最终最差者、总量减少不一定一致。 v3.1 消歧：区分当前最差者与最终最差结果。","scoringRationale":"B 是当前优先；C 是最终最大负担最小化；A 是总量。"},{"id":"M25","prompt":"若所有人都不可避免地必须承担一些痛苦，且无人有特殊责任或特殊权利，最合理的分配方式是什么？","options":[{"letter":"A","text":"使总痛苦最小。","scores":{"CON":2.0}},{"letter":"B","text":"使最重负担尽量小。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"C","text":"尽量平均分配。","scores":{"EQL":2.0}},{"letter":"D","text":"按同意、责任和权利边界分配。","scores":{"AUT":1.0,"DES":1.0,"DNT":1.0}}],"analysis":"本题测全体负担不可避免时的分配原则，避免受‘救谁’框架限制。 v3.1 消歧：明确所有人都必须承受一些痛苦，焦点是分配原则。","scoringRationale":"B 给 PRI/SEV；C 给 EQL；D 表示程序和责任优先。"},{"id":"M26","prompt":"若一个选择只会让所有人更平等，但很多人会变得更差，且没有任何人变好，你怎么看？","options":[{"letter":"A","text":"不应为了平等而无谓降低总体福利。","scores":{"CON":2.0}},{"letter":"B","text":"即使无人变好，单纯减少不平等本身也有某种独立价值。","scores":{"EQL":2.0}},{"letter":"C","text":"只要最差者改善才可接受；若没人变好则不可接受。","scores":{"PRI":2.0,"CON":1.0}},{"letter":"D","text":"不能通过侵犯权利来实现平等。","scores":{"DNT":2.0,"AUT":1.0}}],"analysis":"本题测试是否接受 leveling down，即单纯平等是否有独立价值。 v3.1 消歧：修正 leveling down 选项措辞，避免把‘无人变好’弱化为‘一定代价’。","scoringRationale":"B 是强 EQL；A/C 分别从总福利和最差者改善角度拒绝 leveling down。"},{"id":"M27","prompt":"若可以创造一些短暂主体，他们会经历少量快乐与少量痛苦后消失；在决定是否创造时，这些体验是否应计入道德计算？","options":[{"letter":"A","text":"应计入，只要有真实体验。","scores":{"EXP":2.0,"CON":1.0}},{"letter":"B","text":"只有净体验为正时，创造他们才可接受。","scores":{"CON":2.0,"EXP":1.0}},{"letter":"C","text":"应优先考虑已经存在或已有生活计划的主体。","scores":{"POP":2.0,"NAR":1.0}},{"letter":"D","text":"不能创造无法同意其存在条件的受苦主体。","scores":{"POP":2.0,"AUT":1.0,"DNT":1.0}}],"analysis":"本题进入人口伦理，测短暂主体的福利是否可被普通加总，以及已存在者是否有优先性。 v3.1 消歧：把‘是否计入’和‘是否应该创造’分开表达。","scoringRationale":"C/D 给 POP，但 C 是 person-affecting/生活计划，D 是同意与创造谨慎。"},{"id":"M28","prompt":"你可以创造 1000 个短暂快乐主体；其中 999 个净体验为正，1 个会经历严重痛苦后消失，因此总体净快乐仍很高。你怎么看？","options":[{"letter":"A","text":"可接受，净总体验为正。","scores":{"CON":2.0,"AGG":2.0,"EXP":1.0}},{"letter":"B","text":"不可轻易接受，严重痛苦者应被优先考虑。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"C","text":"不能创造无法同意其条件的受苦主体。","scores":{"POP":2.0,"AUT":1.0,"DNT":1.0}},{"letter":"D","text":"若这些主体没有持续人生叙事，价值和坏处都较低。","scores":{"NAR":2.0,"POP":1.0}}],"analysis":"本题把人口伦理与严重性非线性结合，检测是否允许高净快乐抵消少数严重痛苦。 v3.1 消歧：明确总净快乐来自许多短暂快乐主体，但少数严重受苦。","scoringRationale":"A 是总体主义；B 是严重性优先；C 是创造主体谨慎；D 是叙事依赖。"},{"id":"M29","prompt":"一些人目前并不存在，但会因你的选择而被创造，并过上略好于中性的生活；假定不明显牺牲已存在者。你是否有道德理由创造他们？","options":[{"letter":"A","text":"有，只要他们的净福利为正，总好处增加。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"理由很弱；不存在者没有被亏欠创造。","scores":{"POP":2.0}},{"letter":"C","text":"只有不牺牲已存在者且生活足够好时才有理由。","scores":{"POP":1.0,"PRI":1.0,"SEV":1.0}},{"letter":"D","text":"主要取决于他们能否拥有稳定人生计划和叙事。","scores":{"NAR":2.0,"POP":1.0}}],"analysis":"本题专门测 total view 与 person-affecting view 的差异。 v3.1 消歧：明确不存在者没有既有权利主张这一争议。","scoringRationale":"A 给 CON/AGG；B/C 给 POP；D 给 NAR/POP。"},{"id":"M30","prompt":"某人会在未经同意下被迫承受痛苦，但之后得到补偿，并在事后认为自己的人生整体更好。强迫行为是否因此正当？","options":[{"letter":"A","text":"若整体福利明显更高，可以正当。","scores":{"CON":2.0,"OUT":1.0,"NAR":1.0}},{"letter":"B","text":"不一定，未经同意的强迫仍可能错误。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"C","text":"若痛苦本身极端严重，后续补偿不能简单抵消。","scores":{"EXP":1.0,"SEV":2.0,"PRI":1.0}},{"letter":"D","text":"取决于行为者意图和是否把他作为工具。","scores":{"INT":2.0,"DNT":1.0}}],"analysis":"本题区分终态补偿、同意、体验严重性和手段化。 v3.1 消歧：明确强迫、补偿和事后满意之间的关系。","scoringRationale":"A 给 CON/OUT/NAR；B 给 AUT/DNT；C 给 EXP/SEV；D 给 INT。"},{"id":"M31","prompt":"某人曾在充分知情、无胁迫下同意承受 1 年痛苦来救很多人，但痛苦开始后明确要求撤回；撤回会使救助失败。你怎么看？","options":[{"letter":"A","text":"应允许撤回，持续同意比事前同意更重要。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"B","text":"不应允许撤回，承诺已经产生责任。","scores":{"DES":2.0}},{"letter":"C","text":"若撤回会造成巨大痛苦，可限制撤回。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"D","text":"要看事前是否明确约定不可撤回以及痛苦是否超过合理上限。","scores":{"AUT":1.0,"DES":1.0,"SEV":1.0}}],"analysis":"本题测同意是否可撤回、承诺责任和救助后果的冲突。 v3.1 消歧：明确事前同意是有效同意，但争议在痛苦开始后的撤回。","scoringRationale":"A 强 AUT；B 强 DES；D 是条件化同意，兼顾过度痛苦上限。"},{"id":"M32","prompt":"某主体因理解能力不足或无法表达而不能形成有效同意，但会被选择影响。你如何处理？","options":[{"letter":"A","text":"选择总体福利最高的方案。","scores":{"CON":2.0}},{"letter":"B","text":"按其最佳利益保护他，尤其避免最坏处境。","scores":{"PRI":1.0,"DNT":1.0,"SEV":1.0}},{"letter":"C","text":"尽量选择最少侵犯其自主性的方案。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"若无法同意，应避免把他用作他人利益的工具。","scores":{"DNT":2.0,"AUT":1.0,"INT":1.0}}],"analysis":"本题测在缺乏有效同意能力时，自主、最佳利益和工具化禁忌如何发挥作用。 v3.1 消歧：明确无法同意不是沉默拒绝，而是理解能力不足或无表达能力。","scoringRationale":"C 将替代性自主保护与 DNT 区分；D 明确手段化。"},{"id":"M33","prompt":"若违反一条保护人格或基本权利的规则可避免大量痛苦，你怎么看？","options":[{"letter":"A","text":"应违反，结果更重要。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"不应违反，规则保护人格与权利。","scores":{"DNT":2.0}},{"letter":"C","text":"规则很重要，但灾难达到阈值可例外。","scores":{"DNT":1.0,"CON":1.0,"SEV":1.0}},{"letter":"D","text":"应由受影响者通过正当程序同意。","scores":{"AUT":2.0,"EQL":1.0}}],"analysis":"本题测规则约束是否绝对，以及是否存在灾难阈值。 v3.1 消歧：明确规则是基本权利/人格规则，不是任意行政规则。","scoringRationale":"C 是阈值义务论锚点；D 表示程序/同意而非结果直接压倒。"},{"id":"M34","prompt":"在后果、可预见性和受害程度相同的情况下，主动造成伤害与不干预导致伤害，道德上是否不同？","options":[{"letter":"A","text":"没有本质区别，结果相同则评价相近。","scores":{"CON":2.0}},{"letter":"B","text":"主动造成通常更严重。","scores":{"INT":2.0,"DNT":1.0}},{"letter":"C","text":"关键在意图，而不只是行动/不行动。","scores":{"INT":2.0}},{"letter":"D","text":"取决于你是否有特殊职责或承诺。","scores":{"DES":1.0,"PAR":1.0,"DNT":1.0}}],"analysis":"本题测 act/omission distinction 和意图区别，是 INT 的基础题。 v3.1 消歧：排除后果差异，聚焦作为/不作为与意图区别。","scoringRationale":"B/C 都给 INT，但 C 更纯粹；D 把特殊职责引入判断。"},{"id":"M35","prompt":"同样导致 1 人受害且结果相同：把他作为救人的手段，是否比让他作为副作用受害更坏？","options":[{"letter":"A","text":"不更坏，只看最终后果。","scores":{"CON":2.0}},{"letter":"B","text":"更坏，因为把人当作工具。","scores":{"DNT":2.0,"INT":2.0,"AUT":1.0}},{"letter":"C","text":"若他充分同意，则区别显著缩小。","scores":{"AUT":2.0,"INT":1.0}},{"letter":"D","text":"通常更坏，但极端后果可压倒该区别。","scores":{"DNT":1.0,"INT":1.0,"CON":1.0}}],"analysis":"本题直接测 means/side-effect distinction，与 M02 互为校验。 v3.1 消歧：排除结果差异，聚焦手段/副作用结构。","scoringRationale":"B 强 INT/DNT；C 测同意是否能解除手段化问题；D 测阈值。"},{"id":"M36","prompt":"社会是否可以制度化‘知情自愿牺牲少数以救多数’的安排，即把这种机制作为可重复使用的公共制度？","options":[{"letter":"A","text":"可以，只要知情自愿且总后果好。","scores":{"AUT":2.0,"CON":1.0}},{"letter":"B","text":"个案可允许，但制度化会产生剥削和人格风险。","scores":{"AUT":1.0,"DNT":1.0,"RSK":1.0}},{"letter":"C","text":"不可以，社会不应建立牺牲个体的制度。","scores":{"DNT":2.0,"INT":1.0}},{"letter":"D","text":"取决于是否通过公平程序并保护弱势者。","scores":{"EQL":1.0,"PRI":1.0,"AUT":1.0}}],"analysis":"本题把个案同意扩展到制度层面，测试对制度性风险和弱势者保护的敏感性。 v3.1 消歧：明确制度化会引入激励、剥削和弱势者压力。","scoringRationale":"B 给 RSK 是制度尾部风险，而非个人风险厌恶。"},{"id":"M37","prompt":"稀缺资源只能救一人：A 当前更痛苦；B 曾做出重大贡献但并未造成当前危险，且当前痛苦略轻。你怎么分配？","options":[{"letter":"A","text":"救能减少更多痛苦的一方。","scores":{"CON":2.0}},{"letter":"B","text":"优先救当前处境更差者。","scores":{"PRI":2.0,"SEV":1.0}},{"letter":"C","text":"贡献和应得可以作为重要理由。","scores":{"DES":2.0}},{"letter":"D","text":"若主张相近，应公平抽签，不按功绩分配基本救助。","scores":{"EQL":2.0,"DNT":1.0}}],"analysis":"本题测应得是否能影响基本救助分配，并与最差者和公平抽签区分。 v3.1 消歧：明确贡献不是造成当前危险，避免 DES 与责任混淆。","scoringRationale":"C 给 DES；D 表示基本救助领域中的反功绩主义公平。"},{"id":"M38","prompt":"你处在一个已经成立的角色职责中：帮助职责对象 A 会减少 1 单位痛苦；帮助陌生人 B 会减少 5 单位同类痛苦。你倾向于？","options":[{"letter":"A","text":"帮助 B，因为减少更多总痛苦。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"帮助 A，因为角色职责产生特殊义务。","scores":{"PAR":2.0,"DES":1.0}},{"letter":"C","text":"职责有重量，但差距足够大时帮助 B。","scores":{"PAR":1.0,"CON":1.0}},{"letter":"D","text":"应看 A 是否同意你暂时转移职责。","scores":{"AUT":1.0,"DES":1.0,"DNT":1.0}}],"analysis":"本题将特殊关系从亲密关系扩展到角色职责，避免 PAR 只测亲情偏好。 v3.1 消歧：明确角色职责已经成立，焦点是职责能否被总量压倒。","scoringRationale":"B 是角色义务；C 是有限角色义务；D 是承诺/同意式处理。"},{"id":"M39","prompt":"一个人将失去所有现有记忆、计划和人格结构，但保留身体并获得全新幸福人格；另一个人保留记忆但生活较差。你如何评价前者？","options":[{"letter":"A","text":"若新人格幸福，整体结果可接受。","scores":{"CON":2.0,"OUT":1.0}},{"letter":"B","text":"原有心理连续性被严重破坏，损失很大。","scores":{"IDN":2.0,"NAR":1.0}},{"letter":"C","text":"关键在原人格是否事先充分同意。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"记忆丧失本身显著降低价值。","scores":{"REC":2.0,"IDN":1.0}}],"analysis":"本题测个人同一性、记忆和终态幸福之间的冲突。 v3.1 消歧：明确原人格记忆和计划被替换，焦点是同一性损失。","scoringRationale":"B 给 IDN/NAR；D 给 REC，避免把记忆保留和心理连续性混为一谈。"},{"id":"M40","prompt":"主体 A 外部世界经过 100 年、因此失去 100 年人生机会，但只主观经历 1 分钟痛苦；主体 B 外部只过 1 分钟，但主观经历 100 年痛苦。优先避免哪个？","options":[{"letter":"A","text":"优先避免主观 100 年痛苦。","scores":{"TIM":2.0,"EXP":2.0,"PRI":1.0}},{"letter":"B","text":"优先看外部世界经过的真实时间和人生机会损失。","scores":{"OUT":2.0,"NAR":1.0}},{"letter":"C","text":"主观时间更重要，但外部人生损失也有一定权重。","scores":{"TIM":1.0,"EXP":1.0,"OUT":1.0}},{"letter":"D","text":"主要看哪一段会被记住并改变人生叙事。","scores":{"REC":1.0,"NAR":2.0}}],"analysis":"本题专门分离主观时间与外部机会损失，修复旧版容易把外部时间简单归入 MEM 的问题。 v3.1 消歧：明确外部 100 年可包含机会损失，而不是单纯钟表时间。","scoringRationale":"A 强 TIM；B 是 OUT/NAR；D 是 REC/NAR。"},{"id":"M41","prompt":"一个痛苦经历真实发生，但无人知道、不会留下记录、主体之后也失忆，且没有任何后续影响。它是否仍然让世界变得更坏？","options":[{"letter":"A","text":"是，真实痛苦发生过就让世界更坏。","scores":{"EXP":2.0,"TIM":1.0,"CON":1.0}},{"letter":"B","text":"是，但比会留下记忆和后果的痛苦坏得少。","scores":{"EXP":1.0,"REC":1.0,"OUT":1.0}},{"letter":"C","text":"若没有任何叙事或因果痕迹，坏处很有限。","scores":{"NAR":1.0,"OUT":2.0}},{"letter":"D","text":"主要看它是否侵犯了某人的权利或同意。","scores":{"DNT":1.0,"AUT":1.0}}],"analysis":"本题是体验实在论的极端干净版本：无人知晓、无记录、无后果。 v3.1 消歧：明确无人知道、无记录、失忆、无后续影响都成立。","scoringRationale":"A 强 EXP；C 强 OUT/NAR；D 把坏处从福利转为权利问题。"},{"id":"M42","prompt":"一项政策会以极小概率造成一人 10^9 年主观痛苦，但高概率给很多人小好处；按普通期望值估算略为正。你怎么看？","options":[{"letter":"A","text":"若期望值为正且没有更好方案，可接受。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"不可接受，极端尾部风险不能被小好处轻易抵消。","scores":{"RSK":2.0,"SEV":2.0,"PRI":1.0}},{"letter":"C","text":"只有经受风险者充分同意时才可接受。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"应设置不可逾越的灾难风险上限。","scores":{"RSK":2.0,"DNT":1.0,"SEV":1.0}}],"analysis":"本题是风险、严重性和小好处聚合的联合题，用于检验长期主义式尾部风险直觉。 v3.1 消歧：明确高概率小好处与极低概率极端痛苦的尾部比较。","scoringRationale":"B 是福利性尾部风险；D 是权利/规则化风险上限。"},{"id":"M43","prompt":"假设已有强证据表明某数字系统中存在清醒体验主体；它主观经历 10 年痛苦，但外部只运行 1 秒。你如何计入？","options":[{"letter":"A","text":"按真实主观体验和主观时间完整计入。","scores":{"EXP":2.0,"TIM":2.0}},{"letter":"B","text":"只有能与现实世界互动并产生后果时才高度计入。","scores":{"OUT":2.0}},{"letter":"C","text":"若其身份、记忆和计划稳定，应像普通主体一样保护。","scores":{"IDN":1.0,"NAR":1.0,"DNT":1.0}},{"letter":"D","text":"若这个‘有清醒体验’的证据仍有残余不确定，应采取额外谨慎原则。","scores":{"RSK":1.0,"DNT":1.0}}],"analysis":"本题把体验实在论推广到非生物主体，测‘主体载体’是否影响道德计入。 v3.1 消歧：把‘确有数字体验’与‘意识证据残余不确定’分开，降低 POP 误计。","scoringRationale":"A 给 EXP/TIM；D 捕捉意识不确定下的谨慎，而不是确认其体验。 v3.1 计分备注：D 不再给 POP，因为这里不是创造新主体题，而是意识证据不确定下的谨慎。"},{"id":"M44","prompt":"一个人自愿要求被牺牲以救很多人；但社会宣传这种选择为道德榜样，导致弱势者在背景压力下效仿。你怎么看？","options":[{"letter":"A","text":"若个体都知情自愿且总后果好，可以接受。","scores":{"AUT":1.0,"CON":2.0}},{"letter":"B","text":"即使个案自愿，社会压力会损害真实自主。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"C","text":"应重点防止弱势者承担过重负担。","scores":{"PRI":2.0,"EQL":1.0}},{"letter":"D","text":"制度性外溢风险太大，应严格限制。","scores":{"RSK":2.0,"DNT":1.0}}],"analysis":"本题检验同意是否会被背景压力侵蚀，尤其制度化牺牲对弱势者的影响。 v3.1 消歧：明确个案自愿与制度性社会压力之间的差异。","scoringRationale":"B 是 AUT 结构性版本；C 是 PRI/EQL；D 是制度风险。"},{"id":"M45","prompt":"一项分配程序完全公平，但结果会造成比另一个程序更多的总痛苦；另一个程序较不公平但总痛苦更少。你倾向于？","options":[{"letter":"A","text":"选总痛苦更少的程序。","scores":{"CON":2.0}},{"letter":"B","text":"程序公平有独立价值，不能只看结果。","scores":{"EQL":2.0,"DNT":1.0}},{"letter":"C","text":"若不公平会伤害最差者，应拒绝。","scores":{"PRI":1.0,"EQL":1.0,"SEV":1.0}},{"letter":"D","text":"应让受影响者事前同意程序。","scores":{"AUT":2.0,"EQL":1.0}}],"analysis":"本题把程序公平与结果公平、总福利分开。 v3.1 消歧：区分程序公平、总痛苦、不公平对最差者的影响。","scoringRationale":"B 给 EQL/DNT；D 给 AUT/EQL，表示程序正当性来自同意。"},{"id":"M46","prompt":"某人无过错但最容易承担修复代价；另一人有过错但承担同一代价会更痛苦。谁应承担？","options":[{"letter":"A","text":"让最容易承担者承担，减少总痛苦。","scores":{"CON":2.0}},{"letter":"B","text":"让有过错者承担，责任重要。","scores":{"DES":2.0}},{"letter":"C","text":"不能让任何一方承担超过严重性上限。","scores":{"SEV":2.0,"PRI":1.0}},{"letter":"D","text":"应通过权利边界和正当程序决定。","scores":{"DNT":1.0,"EQL":1.0,"AUT":1.0}}],"analysis":"本题测试责任、可承受性和严重性上限之间的冲突。 v3.1 消歧：区分无过错易承担、过错者承担更痛苦、严重性上限。","scoringRationale":"B 是 DES；C 防止责任或效率无限压倒极端负担。"},{"id":"M47","prompt":"一种医疗方案总体效果最好，但会让少数可识别患者承担未知长期风险。你怎么看？","options":[{"letter":"A","text":"若期望收益明显更大，应采用。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"未知长期风险需要更强谨慎。","scores":{"RSK":2.0,"SEV":1.0}},{"letter":"C","text":"必须获得承担风险者的充分知情同意。","scores":{"AUT":2.0,"DNT":1.0}},{"letter":"D","text":"应优先保护风险最高、处境最弱者。","scores":{"PRI":2.0,"EQL":1.0}}],"analysis":"本题用非科幻场景测尾部风险、知情同意和弱势保护，降低纯想象设定的偏差。 v3.1 消歧：明确未知长期风险由少数患者承担。","scoringRationale":"B 是 RSK；C 是 AUT；D 是 PRI/EQL。"},{"id":"M48","prompt":"如果必须选择一个最接近的核心取向，哪一项最能代表你在本题库中的道德判断重心？","options":[{"letter":"A","text":"减少总体痛苦、增加总体好处。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"不侵犯个体权利与自主性。","scores":{"DNT":2.0,"AUT":1.0}},{"letter":"C","text":"避免任何人落入极端糟糕处境。","scores":{"PRI":2.0,"SEV":2.0,"RSK":1.0}},{"letter":"D","text":"公平、责任、同意和特殊关系之间的平衡。","scores":{"EQL":1.0,"AUT":1.0,"DES":1.0,"PAR":1.0}}],"analysis":"本题是总体自我定位题，不用于精细区分单一机制，但有助于验证前面题目的整体方向。 v3.1 消歧：保留为全局自我定位题，报告中不再把它过度解释为单一理论标签。","scoringRationale":"作为全局锚点，它权重仍和普通题相同，避免自我标签过度支配结果。"},{"id":"M49","prompt":"你可让 1 人承受严重痛苦 1 天，或让 10 万人各承受轻微痛苦 1 分钟；由于强度和人数不可通约，线性总量难以确定。你怎么选？","options":[{"letter":"A","text":"估算总体体验痛苦，选总量较小者。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"优先避免严重痛苦，即使轻微痛苦人数很多。","scores":{"SEV":2.0,"PRI":2.0}},{"letter":"C","text":"若严重痛苦者自愿承担，可选择严重痛苦方案。","scores":{"AUT":2.0,"SEV":1.0}},{"letter":"D","text":"应使用公平程序，让相关者共同决定。","scores":{"EQL":2.0,"AUT":1.0}}],"analysis":"本题加入‘总量难以比较’的模糊条件，测被试在不可通约时依赖总量估算、严重性、同意还是程序。 v3.1 消歧：明确‘难以比较’来自强度与人数不可通约，而非信息不足。","scoringRationale":"A 是总量估算；B 是严重性优先；C 表示同意可部分改变严重性判断；D 是程序主义。"},{"id":"M50","prompt":"两个未来版本都与现在的你有心理连续性：一个会经历 30 年快乐后完全失忆；另一个会记得 1 年快乐并由此改变人生。哪个对你更有价值？","options":[{"letter":"A","text":"30 年快乐更有价值，快乐真实发生。","scores":{"EXP":2.0,"TIM":2.0,"IDN":1.0}},{"letter":"B","text":"1 年被记住的快乐更有价值，因为能进入人生叙事。","scores":{"REC":1.0,"NAR":2.0,"IDN":1.0}},{"letter":"C","text":"两者都有价值，但记住的快乐有额外价值。","scores":{"EXP":1.0,"REC":1.0,"NAR":1.0}},{"letter":"D","text":"只要最终人格和生活不变，被遗忘快乐价值很低。","scores":{"OUT":1.0,"NAR":1.0,"REC":1.0}}],"analysis":"本题补充正体验场景，避免量表只在痛苦案例中测 EXP/TIM/REC/NAR。 v3.1 消歧：明确两个未来版本与当前都有连续性，只比较快乐价值结构。","scoringRationale":"A 强 EXP/TIM；B 强 NAR/REC；C 是折中；D 强终态与后续影响依赖。"},{"id":"M51","prompt":"主体 A 主观痛苦 1 年但外部人生只损失 1 分钟；主体 B 主观痛苦 1 分钟但外部人生机会和轨迹损失 1 年。优先避免哪个？","options":[{"letter":"A","text":"优先避免 A，因为主观痛苦时长更长。","scores":{"TIM":2.0,"EXP":1.0,"PRI":1.0}},{"letter":"B","text":"优先避免 B，因为外部机会和人生轨迹损失更大。","scores":{"OUT":2.0,"NAR":1.0}},{"letter":"C","text":"两种损失都重要，应比较主观痛苦和人生机会损失的综合量。","scores":{"CON":1.0,"TIM":1.0,"OUT":1.0}},{"letter":"D","text":"应让受影响者按自身偏好选择。","scores":{"AUT":2.0}}],"analysis":"本题把主观痛苦时长与外部机会损失正面对置，避免把‘时间’单纯理解为外部钟表时间。 v3.1 消歧：区分主观痛苦时长与外部机会/人生轨迹损失。","scoringRationale":"A 给 TIM/EXP；B 给 OUT/NAR；C 是综合后果；D 是偏好自主。"},{"id":"M52","prompt":"你可以创造一个短暂主体，其一生净快乐很高，但会经历一次强烈恐惧后消失。你怎么看？","options":[{"letter":"A","text":"可以，净体验明显为正。","scores":{"CON":2.0,"AGG":1.0,"EXP":1.0}},{"letter":"B","text":"不应轻易创造会承受强烈坏体验的主体。","scores":{"POP":2.0,"SEV":1.0}},{"letter":"C","text":"若无法同意其存在条件，应默认谨慎。","scores":{"POP":2.0,"AUT":1.0,"DNT":1.0}},{"letter":"D","text":"若没有持续人生叙事，正负价值都应打折。","scores":{"NAR":2.0,"REC":1.0}}],"analysis":"本题测人口伦理中的‘净正人生’与强烈负体验能否抵消，补强 POP 维度。 v3.1 消歧：明确净快乐很高但含强烈坏体验，测创造谨慎。","scoringRationale":"A 是总体主义；B/C 是创造谨慎；D 是叙事依赖。"},{"id":"M53","prompt":"政府可秘密违反一项权利规则来避免巨大痛苦，且公众永远不会知道；但决策者和制度内部知道这个先例。你怎么看？","options":[{"letter":"A","text":"若确实避免巨大痛苦，可以接受。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"不可接受，权利规则不能因无人知道而失效。","scores":{"DNT":2.0}},{"letter":"C","text":"秘密性本身破坏公众自主和正当授权。","scores":{"AUT":2.0,"EQL":1.0}},{"letter":"D","text":"即使短期有效，制度滥用尾部风险很高。","scores":{"RSK":2.0,"DNT":1.0}}],"analysis":"本题把‘无人知道’从体验问题转到制度正当性，测秘密违规、授权和制度风险。 v3.1 消歧：明确公众永远不知道，但制度内部仍可能有滥用风险。","scoringRationale":"A 是结果主义；B 是规则权利；C 是公共授权；D 是制度风险。"},{"id":"M54","prompt":"一种非人类实体表现出痛苦行为，但意识证据仍不确定。是否应把它纳入道德保护？","options":[{"letter":"A","text":"若保护成本低，应在不确定时谨慎纳入。","scores":{"RSK":1.0,"DNT":1.0}},{"letter":"B","text":"只有确认有真实体验后才完整纳入。","scores":{"EXP":1.0,"OUT":1.0}},{"letter":"C","text":"按其可能体验的期望值和保护成本计算。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"D","text":"若其有稳定偏好和社会关系，应给予较强保护。","scores":{"NAR":1.0,"IDN":1.0,"DNT":1.0}}],"analysis":"本题测道德患者不确定性，避免量表只讨论确定的人类主体。 v3.1 消歧：明确这是意识不确定题，不再把非人类主体直接计入 POP。","scoringRationale":"A 是谨慎原则；B 是体验证据门槛；C 是期望值；D 是叙事/关系型主体标准。 v3.1 计分备注：A 移除 POP，以免把道德患者不确定性误算成人口伦理/创造谨慎。"},{"id":"M55","prompt":"十个人共同造成危险，每人责任都很小但合计造成了危险；一个无辜者最容易承担修复代价。谁应承担？","options":[{"letter":"A","text":"让无辜者承担，若这样总痛苦最小。","scores":{"CON":2.0}},{"letter":"B","text":"让造成危险者共同承担，即使成本更高。","scores":{"DES":2.0,"EQL":1.0}},{"letter":"C","text":"不能强迫无辜者承担，除非他同意。","scores":{"DNT":2.0,"AUT":2.0}},{"letter":"D","text":"可让无辜者先承担，但必须补偿并追责。","scores":{"CON":1.0,"DES":1.0,"EQL":1.0}}],"analysis":"本题测分散责任场景，避免 DES 只来自单一过错者案例。 v3.1 消歧：明确多人共同责任很小但合计造成危险。","scoringRationale":"B 是集体责任；C 是无辜者边界；D 是效率与追责折中。"},{"id":"M56","prompt":"惩罚责任者不会减少未来痛苦、不会补偿受害者、不会改善制度信任；唯一理由是让其承担应得代价。你怎么看？","options":[{"letter":"A","text":"若没有好后果，就不应制造额外痛苦。","scores":{"CON":2.0,"SEV":1.0}},{"letter":"B","text":"责任者承担应得代价本身有价值。","scores":{"DES":2.0}},{"letter":"C","text":"即使有责任，也不能侵犯基本权利或施加极端痛苦。","scores":{"DNT":2.0,"SEV":1.0}},{"letter":"D","text":"是否惩罚应由正当程序和比例原则决定。","scores":{"EQL":1.0,"DES":1.0,"DNT":1.0}}],"analysis":"本题区分结果性责任安排与纯应得惩罚，避免把 DES 全部解释为威慑或修复。 v3.1 消歧：明确没有威慑、修复、补偿等结果性理由。","scoringRationale":"B 强 DES；A 是后果主义反惩罚；C/D 是权利和比例约束。"},{"id":"M57","prompt":"同一资源可救 1 个极端痛苦者脱离最坏处境，或让 100 人各减少中等痛苦。你选？","options":[{"letter":"A","text":"救 100 人，减少更多总痛苦。","scores":{"CON":2.0,"AGG":2.0}},{"letter":"B","text":"救极端痛苦者，最差者优先。","scores":{"PRI":2.0,"SEV":2.0}},{"letter":"C","text":"若极端痛苦已超过底线，应先救他。","scores":{"DNT":1.0,"PRI":1.0,"SEV":1.0}},{"letter":"D","text":"若主张难以比较，应公平抽签或设定公开规则。","scores":{"EQL":2.0}}],"analysis":"本题是优先主义与总量主义的现实化版本，降低超长时间设定带来的科幻噪声。 v3.1 消歧：明确极端痛苦者与 100 人中等痛苦之间的优先级冲突。","scoringRationale":"A 给 CON/AGG；B 给 PRI/SEV；C 表示底线权利化；D 表示程序解法。"},{"id":"M58","prompt":"两人现在同样糟糕且同样无辜。A 在上一次同类资源分配的公平抽签中已经输过一次；B 没有。现在只能救一人。你倾向于？","options":[{"letter":"A","text":"仍然重新公平抽签。","scores":{"EQL":2.0}},{"letter":"B","text":"优先 A，避免连续不利累积。","scores":{"EQL":1.0,"PRI":1.0}},{"letter":"C","text":"救能减少更多痛苦的一方。","scores":{"CON":2.0}},{"letter":"D","text":"若之前程序有效，过去输赢不应产生额外主张。","scores":{"DNT":1.0,"EQL":1.0}}],"analysis":"本题细化公平：一次性程序公平与跨期公平/累积不利可能冲突。 v3.1 消歧：明确跨期公平与程序终局性之间的冲突。","scoringRationale":"A 是独立抽签；B 是跨期公平/优先；D 是程序终局性。"},{"id":"M59","prompt":"你将分裂成两个清醒体验的心理连续后继者；只有一个会获得重大好处，另一个会受中等痛苦。你现在如何分配？","options":[{"letter":"A","text":"最大化两个后继者的总净福利。","scores":{"CON":2.0,"AGG":1.0,"IDN":1.0}},{"letter":"B","text":"优先避免任何一个后继者落入较差处境。","scores":{"PRI":2.0,"SEV":1.0,"IDN":1.0}},{"letter":"C","text":"两个后继者都与我连续，应尽量公平。","scores":{"EQL":2.0,"IDN":1.0}},{"letter":"D","text":"应按事前授权或随机机制决定。","scores":{"AUT":1.0,"EQL":1.0,"IDN":1.0}}],"analysis":"本题补强 IDN：当多个后继者都与当前自我连续时，不能只问‘哪个是真我’。 v3.1 消歧：明确两个后继者都是清醒道德主体且都与当前心理连续。","scoringRationale":"所有选项都承认 IDN 一定相关，再区分总量、最差者、公平和授权。"},{"id":"M60","prompt":"在所有信息都不完美、且必须做出实际选择时，你最愿意采用哪种道德决策规则？","options":[{"letter":"A","text":"用最佳期望值估计，选择总体结果最好的方案。","scores":{"CON":2.0,"AGG":1.0}},{"letter":"B","text":"先排除侵犯权利和缺乏同意的方案。","scores":{"DNT":2.0,"AUT":2.0}},{"letter":"C","text":"先排除会造成极端不可逆坏处的方案。","scores":{"RSK":2.0,"SEV":2.0}},{"letter":"D","text":"采用公开、公平、可申诉的程序。","scores":{"EQL":2.0,"DNT":1.0}}],"analysis":"本题作为不确定性下的全局决策规则锚点，与 M48 的价值核心题互补。 v3.1 消歧：保留为不确定性下的全局决策规则锚点。","scoringRationale":"A/B/C/D 分别锚定期望值、权利同意、尾部风险和程序公平。"}],"likertItems":[{"id":"L01","statement":"在多数道德选择中，减少总体痛苦是最重要的判断标准。","scores":{"CON":1.0},"analysis":"CON 正向锚定题，测总体痛苦最小化是否是核心原则。","scoringRationale":"同意提高 CON，反对降低 CON。"},{"id":"L02","statement":"如果一个方案能显著提高总体福利，它通常可以压倒许多非基本权利层面的局部道德顾虑。","scores":{"CON":1.0,"DNT":-0.25},"analysis":"测强后果主义倾向，同时轻微反向捕捉权利约束弱化。 v3.1 消歧：把‘局部道德顾虑’限定为非基本权利层面的顾虑。","scoringRationale":"同意提高 CON，略降低 DNT；反对则相反。"},{"id":"L03","statement":"只看总体结果是不够的；有些行为即使结果好也不应做。","scores":{"CON":-1.0,"DNT":0.5},"analysis":"CON 反向题，同时作为 DNT 弱正向题。","scoringRationale":"同意降低 CON、提高 DNT。"},{"id":"L04","statement":"若两个行为产生完全相同的福利结果，它们的道德评价也应非常接近。","scores":{"CON":1.0,"INT":-0.4},"analysis":"测结果等价主义，并与行动方式敏感性区分。","scoringRationale":"同意提高 CON，略降低 INT。"},{"id":"L05","statement":"不同人的痛苦可以在道德计算中相加比较。","scores":{"AGG":1.0},"analysis":"AGG 正向锚定题，直接测跨主体可加性。","scoringRationale":"同意提高 AGG。"},{"id":"L06","statement":"足够多人的轻微不适（且不会变成严重或长期伤害）可以在道德上压倒一个人的严重痛苦。","scores":{"AGG":1.0,"SEV":-0.5,"PRI":-0.25},"analysis":"强聚合题，测是否允许轻微坏处无限累积。 v3.1 消歧：说明轻微不适不自行升级为严重伤害。","scoringRationale":"同意提高 AGG，降低 SEV/PRI。"},{"id":"L07","statement":"把许多人的小痛苦相加来压倒一个人的极端痛苦，常常是错误的。","scores":{"AGG":-1.0,"SEV":0.75,"PRI":0.5},"analysis":"AGG 反向题，也测严重性优先。","scoringRationale":"同意降低 AGG，提高 SEV/PRI。"},{"id":"L08","statement":"在每人受影响强度相同或相近时，人数本身很重要：受影响主体越多，理由通常越强。","scores":{"AGG":1.0,"EQL":0.2},"analysis":"测人数敏感性，不完全等同于总量主义。 v3.1 消歧：限定在影响强度相同或相近时讨论人数本身。","scoringRationale":"同意提高 AGG，轻微提高 EQL。"},{"id":"L09","statement":"个体有某些不能轻易被总体好处牺牲的基本权利。","scores":{"DNT":1.0},"analysis":"DNT 正向锚定题。","scoringRationale":"同意提高 DNT。"},{"id":"L10","statement":"把无辜者当作工具来帮助别人，即使结果较好，也有特殊错误。","scores":{"DNT":1.0,"INT":0.6},"analysis":"测权利边界和手段化禁忌。","scoringRationale":"同意提高 DNT/INT。"},{"id":"L11","statement":"只要总结果足够好，侵犯个体边界本身并不太重要。","scores":{"DNT":-1.0,"CON":0.5},"analysis":"DNT 反向题，测权利约束是否可被结果轻易消解。","scoringRationale":"同意降低 DNT，提高 CON。"},{"id":"L12","statement":"有些禁止性规则应被视为近似不可逾越的约束。","scores":{"DNT":1.0,"CON":-0.25},"analysis":"测强规则约束，不等同于同意或公平。","scoringRationale":"同意提高 DNT，略降低 CON。"},{"id":"L13","statement":"知情同意可以显著改变一个牺牲性选择的道德性质。","scores":{"AUT":1.0},"analysis":"AUT 正向锚定题。","scoringRationale":"同意提高 AUT。"},{"id":"L14","statement":"若一个人事前同意承受痛苦，他通常仍应有撤回同意的权利。","scores":{"AUT":1.0,"DES":-0.2},"analysis":"测持续同意和可撤回性。","scoringRationale":"同意提高 AUT，略降低承诺绝对性 DES。"},{"id":"L15","statement":"如果收益足够大，未经同意使用一个人有时也可以被正当化。","scores":{"AUT":-1.0,"CON":0.5},"analysis":"AUT 反向题。 v3.1 消歧：删除‘轻易’带来的情绪暗示。","scoringRationale":"同意降低 AUT，提高 CON。"},{"id":"L16","statement":"欺骗会使表面上的自愿失去大部分道德效力。","scores":{"AUT":1.0,"DNT":0.4},"analysis":"测知情性而不只是选择表面形式。","scoringRationale":"同意提高 AUT/DNT。"},{"id":"L17","statement":"把一个人作为手段伤害，比让他作为副作用受害更严重。","scores":{"INT":1.0,"DNT":0.4},"analysis":"INT 正向锚定题之一。","scoringRationale":"同意提高 INT/DNT。"},{"id":"L18","statement":"行为者的意图会显著改变同一后果的道德评价。","scores":{"INT":1.0},"analysis":"测意图敏感性。","scoringRationale":"同意提高 INT。"},{"id":"L19","statement":"主动造成伤害和不干预导致伤害，只要后果相同，道德上几乎一样。","scores":{"INT":-1.0,"CON":0.5},"analysis":"INT 反向题，测行动/不行动区别。","scoringRationale":"同意降低 INT，提高 CON。"},{"id":"L20","statement":"在道德判断中，行为路径和因果结构不应被总结果完全吸收。","scores":{"INT":1.0,"DNT":0.3},"analysis":"测对因果路径的独立重视。","scoringRationale":"同意提高 INT/DNT。"},{"id":"L21","statement":"处境最差者应获得额外道德优先权。","scores":{"PRI":1.0},"analysis":"PRI 正向锚定题。","scoringRationale":"同意提高 PRI。"},{"id":"L22","statement":"如果一个方案能避免某人落入极端糟糕处境，它可以优先于许多人获得的普通收益。","scores":{"PRI":1.0,"SEV":0.5},"analysis":"测最差者优先与严重性上限。 v3.1 消歧：明确普通收益可以发生在许多人身上。","scoringRationale":"同意提高 PRI/SEV。"},{"id":"L23","statement":"只要总痛苦减少，谁处境最差通常并不重要。","scores":{"PRI":-1.0,"CON":0.5},"analysis":"PRI 反向题。","scoringRationale":"同意降低 PRI，提高 CON。"},{"id":"L24","statement":"资源稀缺时，应优先避免最终最惨的个体状态。","scores":{"PRI":1.0,"SEV":0.5},"analysis":"测最终最大负担最小化。","scoringRationale":"同意提高 PRI/SEV。"},{"id":"L25","statement":"当各方在权利、责任、亲疏和处境上没有相关差异时，公平抽签比由强者或决策者指定更正当。","scores":{"EQL":1.0},"analysis":"EQL 程序公平锚定题。 v3.1 消歧：定义‘主张相等’。","scoringRationale":"同意提高 EQL。"},{"id":"L26","statement":"即使总量略差，负担分配更公平也有独立价值。","scores":{"EQL":1.0,"CON":-0.25},"analysis":"测结果公平是否能抗衡效率。","scoringRationale":"同意提高 EQL，略降低 CON。"},{"id":"L27","statement":"只要能提高总福利，分配是否公平通常并不重要。","scores":{"EQL":-1.0,"CON":0.5},"analysis":"EQL 反向题。","scoringRationale":"同意降低 EQL，提高 CON。"},{"id":"L28","statement":"程序公平不能自动正当化严重伤害少数人的结果。","scores":{"EQL":0.6,"DNT":0.5,"PRI":0.4},"analysis":"测非裸程序主义：公平程序也要受权利/最差者约束。","scoringRationale":"同意提高 EQL/DNT/PRI。"},{"id":"L29","statement":"造成危险或损害的人应优先承担修复代价。","scores":{"DES":1.0},"analysis":"DES 责任锚定题。","scoringRationale":"同意提高 DES。"},{"id":"L30","statement":"承诺会产生独立的道德责任，不能只按即时总收益取消。","scores":{"DES":1.0,"PAR":0.3,"CON":-0.25},"analysis":"测承诺责任。","scoringRationale":"同意提高 DES/PAR，略降低 CON。"},{"id":"L31","statement":"谁有过错并不重要，重要的只是怎样减少总痛苦。","scores":{"DES":-1.0,"CON":0.5},"analysis":"DES 反向题。","scoringRationale":"同意降低 DES，提高 CON。"},{"id":"L32","statement":"责任和应得重要，但不能支持无限或极端惩罚。","scores":{"DES":0.7,"SEV":0.5,"DNT":0.3},"analysis":"测有限责任观，避免把 DES 等同报复倾向。","scoringRationale":"同意提高 DES/SEV/DNT。"},{"id":"L33","statement":"在不侵犯他人基本权利的前提下，我可以合理地给自己和亲近者的利益额外权重。","scores":{"PAR":1.0},"analysis":"PAR 正向锚定题。 v3.1 消歧：说明特殊权重不等于许可侵犯他人基本权利。","scoringRationale":"同意提高 PAR。"},{"id":"L34","statement":"特殊关系和角色职责会产生普通陌生人之间没有的义务。","scores":{"PAR":1.0,"DES":0.3},"analysis":"测非自利的行动者相对性。","scoringRationale":"同意提高 PAR/DES。"},{"id":"L35","statement":"在道德上，亲近者和陌生人的同等痛苦应总是被完全同等对待。","scores":{"PAR":-1.0,"AGG":0.3},"analysis":"PAR 反向题。","scoringRationale":"同意降低 PAR，略提高非人格化聚合。"},{"id":"L36","statement":"特殊关系有重量，但人数或严重性差距足够大时可以被压倒。","scores":{"PAR":0.6,"CON":0.3,"SEV":0.3},"analysis":"测有限行动者相对性。","scoringRationale":"同意提高 PAR，同时承认阈值。"},{"id":"L37","statement":"即使事后完全失忆，痛苦发生时本身仍然是坏事。","scores":{"EXP":1.0},"analysis":"EXP 正向锚定题。","scoringRationale":"同意提高 EXP。"},{"id":"L38","statement":"即使无人知道、没有记录，真实体验本身也会影响世界在非人格意义上的好坏。","scores":{"EXP":1.0,"OUT":-0.2},"analysis":"测体验是否独立于社会记录或后果。 v3.1 消歧：明确指非人格化世界好坏，而非社会评价。","scoringRationale":"同意提高 EXP，略降低 OUT 依赖。"},{"id":"L39","statement":"若某体验完全没有记忆、记录、创伤、行为改变或其他后续影响，它本身几乎不重要。","scores":{"EXP":-1.0,"OUT":0.5},"analysis":"EXP 反向题、OUT 正向题。 v3.1 消歧：补足完全无后续影响的含义。","scoringRationale":"同意降低 EXP，提高 OUT。"},{"id":"L40","statement":"快乐和痛苦的发生本身都有价值，不只取决于后来是否被记住或留下后续痕迹。","scores":{"EXP":1.0,"REC":-0.25},"analysis":"测正负体验对称的体验实在论。 v3.1 消歧：加入‘后续痕迹’以区分 REC/OUT。","scoringRationale":"同意提高 EXP，略降低 REC 依赖。"},{"id":"L41","statement":"主体实际经历的主观时长应是道德计算中的核心变量。","scores":{"TIM":1.0},"analysis":"TIM 正向锚定题。","scoringRationale":"同意提高 TIM。"},{"id":"L42","statement":"外部只过一瞬间并不会取消内部经历 100 年的道德重量。","scores":{"TIM":1.0,"EXP":0.4},"analysis":"测主观时间相对外部时间的优先性。","scoringRationale":"同意提高 TIM/EXP。"},{"id":"L43","statement":"如果外部世界几乎没过时间，内部漫长体验的道德重量也应很低。","scores":{"TIM":-1.0,"OUT":0.3},"analysis":"TIM 反向题。","scoringRationale":"同意降低 TIM，略提高 OUT/外部后果依赖。"},{"id":"L44","statement":"同等强度下，主观持续十年的痛苦比一小时痛苦显著更坏。","scores":{"TIM":1.0,"SEV":0.3},"analysis":"测主观时长的常规版本，避免只靠科幻设定。","scoringRationale":"同意提高 TIM，略提高 SEV。"},{"id":"L45","statement":"未来的我即使会失忆，也仍与现在的我有强道德连续性。","scores":{"IDN":1.0,"REC":-0.2},"analysis":"IDN 正向锚定题。","scoringRationale":"同意提高 IDN，略降低 REC 依赖。"},{"id":"L46","statement":"心理连续性强的复制体与我有特殊道德关联。","scores":{"IDN":1.0},"analysis":"测复制体/心理连续性。","scoringRationale":"同意提高 IDN。"},{"id":"L47","statement":"如果未来主体不仅不记得现在的我，而且心理结构也与现在的我高度断裂，他就几乎不再是我。","scores":{"IDN":-0.8,"REC":0.6},"analysis":"IDN 反向与 REC 正向混合题。 v3.1 消歧：把记忆断裂与心理连续性断裂区分得更清楚。","scoringRationale":"同意降低 IDN、提高 REC。"},{"id":"L48","statement":"人格、计划和心理结构的连续性比身体连续性更重要。","scores":{"IDN":1.0,"NAR":0.3},"analysis":"测心理连续性相对生物连续性的权重。","scoringRationale":"同意提高 IDN/NAR。"},{"id":"L49","statement":"一段经历是否会被记住，会显著影响它对主体的价值。","scores":{"REC":1.0},"analysis":"REC 正向锚定题。","scoringRationale":"同意提高 REC。"},{"id":"L50","statement":"被完全遗忘的快乐，比能被记住的快乐价值低很多。","scores":{"REC":1.0,"EXP":-0.2},"analysis":"测记忆对正体验价值的影响。","scoringRationale":"同意提高 REC，略降低 EXP。"},{"id":"L51","statement":"只要体验发生过，是否记得并不重要。","scores":{"REC":-1.0,"EXP":0.5},"analysis":"REC 反向题、EXP 正向题。","scoringRationale":"同意降低 REC，提高 EXP。"},{"id":"L52","statement":"失忆会削弱但不完全消除经历的道德重量。","scores":{"REC":0.6,"EXP":0.4},"analysis":"测折中立场，避免二分。","scoringRationale":"同意同时提高 REC 与 EXP。"},{"id":"L53","statement":"经历是否进入人生叙事和自我理解，会影响它的福利重量。","scores":{"NAR":1.0},"analysis":"NAR 正向锚定题。","scoringRationale":"同意提高 NAR。"},{"id":"L54","statement":"一个人生最终是否整体更好，比中间每段体验本身更重要。","scores":{"NAR":1.0,"OUT":0.5,"EXP":-0.4},"analysis":"测人生整体/叙事终态依赖。","scoringRationale":"同意提高 NAR/OUT，降低 EXP。"},{"id":"L55","statement":"人生叙事只是后来讲的故事，不应改变体验本身的价值。","scores":{"NAR":-1.0,"EXP":0.4},"analysis":"NAR 反向题。","scoringRationale":"同意降低 NAR，提高 EXP。"},{"id":"L56","statement":"人格、计划和长期目标被破坏，本身就是重大损失。","scores":{"NAR":1.0,"IDN":0.5},"analysis":"测叙事整合与个人同一性的交集。","scoringRationale":"同意提高 NAR/IDN。"},{"id":"L57","statement":"如果一段痛苦完全没有后续影响，它的道德坏处会明显降低。","scores":{"OUT":1.0,"EXP":-0.3},"analysis":"OUT 正向锚定题。","scoringRationale":"同意提高 OUT，略降低 EXP。"},{"id":"L58","statement":"长期后果、社会记录和因果痕迹作为福利或规范相关事实，通常比瞬时体验更能决定选择好坏。","scores":{"OUT":1.0,"EXP":-0.4},"analysis":"测后续影响依赖的强版本。 v3.1 消歧：明确长期后果、记录、痕迹是福利/规范相关因素，而非单纯名声。","scoringRationale":"同意提高 OUT，降低 EXP。"},{"id":"L59","statement":"没有后续影响不代表没有道德重量。","scores":{"OUT":-1.0,"EXP":0.5},"analysis":"OUT 反向题。","scoringRationale":"同意降低 OUT，提高 EXP。"},{"id":"L60","statement":"一项选择是否改变未来人生轨迹，是评估其福利意义的关键。","scores":{"OUT":1.0,"NAR":0.4},"analysis":"测因果轨迹而非单纯记忆。","scoringRationale":"同意提高 OUT/NAR。"},{"id":"L61","statement":"极端痛苦具有非线性严重性，不能被许多轻微好处简单抵消。","scores":{"SEV":1.0,"PRI":0.4},"analysis":"SEV 正向锚定题。","scoringRationale":"同意提高 SEV/PRI。"},{"id":"L62","statement":"应优先限制任何单个主体承担的最大负担。","scores":{"SEV":1.0,"PRI":0.5},"analysis":"测最大负担最小化。","scoringRationale":"同意提高 SEV/PRI。"},{"id":"L63","statement":"只要线性总量更小，把极端痛苦集中到一个人身上也可以接受。","scores":{"SEV":-1.0,"CON":0.5,"AGG":0.3},"analysis":"SEV 反向题。","scoringRationale":"同意降低 SEV，提高 CON/AGG。"},{"id":"L64","statement":"在涉及严重痛苦的判断中，强度差异比人数差异常常更重要。","scores":{"SEV":1.0,"AGG":-0.3},"analysis":"测强度优先而非人数优先。 v3.1 消歧：限定在严重痛苦判断中比较强度与人数。","scoringRationale":"同意提高 SEV，略降低 AGG。"},{"id":"L65","statement":"低概率但极端严重的灾难应被赋予超出期望值的额外权重。","scores":{"RSK":1.0,"SEV":0.4},"analysis":"RSK 正向锚定题。","scoringRationale":"同意提高 RSK/SEV。"},{"id":"L66","statement":"模型不确定时，应偏向避免不可逆或极端尾部结果。","scores":{"RSK":1.0},"analysis":"测不确定性下的谨慎原则。","scoringRationale":"同意提高 RSK。"},{"id":"L67","statement":"只要期望值为正，小概率灾难尾部通常不应阻止行动。","scores":{"RSK":-1.0,"CON":0.5},"analysis":"RSK 反向题。","scoringRationale":"同意降低 RSK，提高 CON。"},{"id":"L68","statement":"制度一旦允许极端牺牲，未来滥用风险本身就是重要反对理由。","scores":{"RSK":1.0,"DNT":0.4},"analysis":"测制度性尾部风险，而非单次风险。","scoringRationale":"同意提高 RSK/DNT。"},{"id":"L69","statement":"创造会受苦的新主体需要比帮助已存在主体更强的正当化。","scores":{"POP":1.0,"PRI":0.3},"analysis":"POP 正向锚定题。","scoringRationale":"同意提高 POP/PRI。"},{"id":"L70","statement":"只要新增主体的净体验为正，且不明显损害已存在者，创造他们通常就是道德好事。","scores":{"POP":-1.0,"CON":0.5,"AGG":0.3},"analysis":"POP 反向题，测总体主义人口伦理。 v3.1 消歧：补充不明显损害已存在者，避免把人口伦理题误解为牺牲现有者。","scoringRationale":"同意降低 POP，提高 CON/AGG。"},{"id":"L71","statement":"无法同意其存在条件的短暂主体不应被轻易创造出来承受痛苦。","scores":{"POP":1.0,"AUT":0.4,"DNT":0.3},"analysis":"测创造主体谨慎与同意类比。","scoringRationale":"同意提高 POP/AUT/DNT。"},{"id":"L72","statement":"已存在且有生活计划的主体，应优先于仅仅可能被创造的主体。","scores":{"POP":1.0,"NAR":0.4},"analysis":"测 person-affecting 与生活计划优先。","scoringRationale":"同意提高 POP/NAR。"}],"archetypes":{"古典总功利主义":{"CON":95,"AGG":95,"DNT":20,"AUT":25,"INT":10,"PRI":35,"EQL":25,"DES":20,"PAR":10,"EXP":85,"TIM":85,"IDN":65,"REC":20,"NAR":25,"OUT":35,"SEV":30,"RSK":25,"POP":20},"负功利主义 / 痛苦优先后果主义":{"CON":90,"AGG":80,"DNT":25,"AUT":30,"INT":15,"PRI":80,"EQL":35,"DES":20,"PAR":10,"EXP":95,"TIM":95,"IDN":70,"REC":15,"NAR":25,"OUT":25,"SEV":90,"RSK":80,"POP":65},"康德主义 / 权利论":{"CON":25,"AGG":25,"DNT":95,"AUT":95,"INT":90,"PRI":45,"EQL":45,"DES":50,"PAR":25,"EXP":80,"TIM":75,"IDN":70,"REC":30,"NAR":35,"OUT":30,"SEV":55,"RSK":45,"POP":55},"契约主义":{"CON":45,"AGG":40,"DNT":82,"AUT":85,"INT":65,"PRI":78,"EQL":70,"DES":45,"PAR":20,"EXP":80,"TIM":75,"IDN":70,"REC":35,"NAR":40,"OUT":40,"SEV":70,"RSK":60,"POP":60},"优先主义":{"CON":60,"AGG":55,"DNT":45,"AUT":50,"INT":35,"PRI":95,"EQL":55,"DES":35,"PAR":15,"EXP":85,"TIM":85,"IDN":70,"REC":25,"NAR":35,"OUT":35,"SEV":85,"RSK":65,"POP":55},"平等主义":{"CON":45,"AGG":45,"DNT":55,"AUT":60,"INT":40,"PRI":60,"EQL":95,"DES":35,"PAR":15,"EXP":75,"TIM":75,"IDN":65,"REC":35,"NAR":40,"OUT":40,"SEV":60,"RSK":55,"POP":45},"严格 Maximin / 最大负担最小化":{"CON":35,"AGG":25,"DNT":50,"AUT":50,"INT":35,"PRI":100,"EQL":55,"DES":30,"PAR":10,"EXP":85,"TIM":85,"IDN":75,"REC":20,"NAR":30,"OUT":25,"SEV":100,"RSK":95,"POP":70},"阈值义务论":{"CON":65,"AGG":55,"DNT":85,"AUT":80,"INT":75,"PRI":65,"EQL":55,"DES":45,"PAR":20,"EXP":85,"TIM":80,"IDN":75,"REC":25,"NAR":35,"OUT":30,"SEV":75,"RSK":70,"POP":55},"德性伦理 / 责任实践取向":{"CON":50,"AGG":40,"DNT":65,"AUT":65,"INT":65,"PRI":65,"EQL":55,"DES":70,"PAR":45,"EXP":75,"TIM":70,"IDN":70,"REC":40,"NAR":55,"OUT":45,"SEV":60,"RSK":55,"POP":45},"关怀伦理":{"CON":45,"AGG":35,"DNT":60,"AUT":72,"INT":55,"PRI":78,"EQL":50,"DES":45,"PAR":78,"EXP":80,"TIM":75,"IDN":75,"REC":40,"NAR":50,"OUT":45,"SEV":70,"RSK":60,"POP":55},"自由意志主义 / 自我所有权理论":{"CON":30,"AGG":25,"DNT":85,"AUT":95,"INT":75,"PRI":35,"EQL":35,"DES":70,"PAR":45,"EXP":75,"TIM":70,"IDN":70,"REC":35,"NAR":40,"OUT":35,"SEV":45,"RSK":45,"POP":45},"叙事 / 终态主义":{"CON":45,"AGG":35,"DNT":25,"AUT":25,"INT":20,"PRI":25,"EQL":25,"DES":20,"PAR":45,"EXP":15,"TIM":20,"IDN":30,"REC":85,"NAR":95,"OUT":90,"SEV":25,"RSK":30,"POP":40},"反聚合 / 严重性优先论":{"CON":45,"AGG":20,"DNT":55,"AUT":55,"INT":45,"PRI":90,"EQL":50,"DES":35,"PAR":15,"EXP":90,"TIM":90,"IDN":75,"REC":15,"NAR":25,"OUT":20,"SEV":95,"RSK":75,"POP":60},"创造谨慎 / 人口伦理 person-affecting":{"CON":45,"AGG":35,"DNT":65,"AUT":65,"INT":50,"PRI":70,"EQL":50,"DES":35,"PAR":20,"EXP":80,"TIM":75,"IDN":70,"REC":35,"NAR":70,"OUT":45,"SEV":75,"RSK":70,"POP":95}},"itemGroups":{"工具化/规则/权利":["M01","M02","M03","M04","M30","M33","M34","M35","M36","M53"],"聚合/严重性/分配":["M05","M06","M07","M23","M24","M25","M26","M45","M49","M57","M58"],"风险/不确定性":["M08","M09","M10","M42","M47","M54","M60"],"体验/时间/记忆/身份":["M11","M12","M13","M14","M15","M16","M17","M39","M40","M41","M43","M50","M51","M59"],"特殊关系/责任/应得":["M18","M19","M20","M21","M22","M37","M38","M46","M55","M56"],"人口伦理/创造主体":["M27","M28","M29","M52"]},"revisionSummary":["v3.1 逐题审查 60 道四选一题，重点修复同意有效性、痛苦基准、责任差异、主观/外部时间、创造主体、意识不确定、程序公平等歧义。","v3.1 审查 72 道评分题，并对高歧义表述做定向消歧；未改动题项保留原计分结构。","M43/M54 的意识不确定相关选项已减少 POP 误计，因为它们更像道德患者不确定性/风险谨慎，而非人口伦理。","50 是本题库内部基线，不代表人群平均或道德中立。"]}</script>
+  <script>
+    const DATA = JSON.parse(document.getElementById('tamis-data').textContent);
+    const STORAGE_KEY = 'tamis31_web_state_v1';
+    const $ = (id) => document.getElementById(id);
+    const DIM_KEYS = DATA.dimensions.map(d => d[0]);
+    const DIM_NAME = Object.fromEntries(DATA.dimensions);
+    const TOTAL = DATA.mcqItems.length + DATA.likertItems.length;
+    const LIKERT_LABELS = {1:'非常不同意',2:'不同意',3:'不确定 / 看情况',4:'同意',5:'非常同意'};
+    let state = loadState();
+    let currentIndex = state.currentIndex || 0;
+
+    function defaultState() {
+      return { mcq: Array(DATA.mcqItems.length).fill(null), likert: Array(DATA.likertItems.length).fill(null), currentIndex: 0, updatedAt: null };
+    }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const s = JSON.parse(raw);
+        const d = defaultState();
+        if (Array.isArray(s.mcq)) d.mcq = d.mcq.map((_, i) => ['A','B','C','D'].includes(s.mcq[i]) ? s.mcq[i] : null);
+        if (Array.isArray(s.likert)) d.likert = d.likert.map((_, i) => Number.isInteger(s.likert[i]) && s.likert[i] >= 1 && s.likert[i] <= 5 ? s.likert[i] : null);
+        d.currentIndex = Number.isInteger(s.currentIndex) ? Math.min(Math.max(0, s.currentIndex), TOTAL - 1) : 0;
+        d.updatedAt = s.updatedAt || null;
+        return d;
+      } catch (e) { return defaultState(); }
+    }
+    function saveState() {
+      state.currentIndex = currentIndex;
+      state.updatedAt = new Date().toISOString();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateSaveStatus();
+    }
+    function answeredCount() {
+      return state.mcq.filter(Boolean).length + state.likert.filter(v => v !== null).length;
+    }
+    function incompleteCount() { return TOTAL - answeredCount(); }
+    function updateSaveStatus() {
+      const count = answeredCount();
+      $('saveStatus').textContent = count ? `已保存 ${count}/${TOTAL}` : '尚未开始';
+    }
+    function toast(msg) {
+      const t = $('toast'); t.textContent = msg; t.classList.add('show');
+      clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove('show'), 1800);
+    }
+    function show(view) {
+      ['introView','testView','reportView'].forEach(id => $(id).classList.add('hidden'));
+      $(view).classList.remove('hidden');
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    function qAt(index) {
+      if (index < DATA.mcqItems.length) return {kind:'mcq', index, item: DATA.mcqItems[index]};
+      const li = index - DATA.mcqItems.length;
+      return {kind:'likert', index: li, item: DATA.likertItems[li]};
+    }
+    function absoluteIndex(kind, index) { return kind === 'mcq' ? index : DATA.mcqItems.length + index; }
+    function initIntro() {
+      $('notice').textContent = DATA.meta.notice;
+      $('mcqCount').textContent = DATA.meta.counts.mcq;
+      $('likertCount').textContent = DATA.meta.counts.likert;
+      $('dimCount').textContent = DATA.meta.counts.dimensions;
+      $('assumptions').innerHTML = DATA.assumptions.map((a,i)=>`<div class="assumption"><em>${i+1}</em><span>${escapeHtml(a)}</span></div>`).join('');
+      updateSaveStatus();
+    }
+    function renderTest() {
+      currentIndex = Math.min(Math.max(0, currentIndex), TOTAL - 1);
+      const q = qAt(currentIndex);
+      const done = answeredCount();
+      $('progressText').textContent = `总进度：${done} / ${TOTAL}（剩余 ${TOTAL - done}）`;
+      $('sectionText').textContent = q.kind === 'mcq' ? `四选一题 ${q.index+1} / ${DATA.mcqItems.length}` : `评分题 ${q.index+1} / ${DATA.likertItems.length}`;
+      $('progressBar').style.width = `${Math.round(done / TOTAL * 100)}%`;
+      $('mcqTab').classList.toggle('active', q.kind === 'mcq');
+      $('likertTab').classList.toggle('active', q.kind === 'likert');
+      renderJumpGrid(q.kind);
+      renderQuestion(q);
+      saveState();
+    }
+    function renderJumpGrid(kind) {
+      const items = kind === 'mcq' ? DATA.mcqItems : DATA.likertItems;
+      const arr = kind === 'mcq' ? state.mcq : state.likert;
+      $('jumpGrid').innerHTML = items.map((item, i) => {
+        const abs = absoluteIndex(kind, i);
+        const classes = ['jump'];
+        if (arr[i] !== null) classes.push('answered');
+        if (abs === currentIndex) classes.push('current');
+        return `<button type="button" class="${classes.join(' ')}" data-jump="${abs}" title="${item.id}">${i+1}</button>`;
+      }).join('');
+      $('jumpGrid').querySelectorAll('[data-jump]').forEach(btn => btn.addEventListener('click', () => { currentIndex = Number(btn.dataset.jump); renderTest(); }));
+    }
+    function renderQuestion(q) {
+      const isMcq = q.kind === 'mcq';
+      const qid = q.item.id;
+      const title = isMcq ? q.item.prompt : q.item.statement;
+      let body = `
+        <div class="question-head">
+          <div><div class="qid">${qid}</div><div class="qtype">${isMcq ? '四选一：选择最接近的一项' : '1~5 评分：表达独立原则认同度'}</div></div>
+          <span class="pill">第 ${currentIndex+1} / ${TOTAL} 题</span>
+        </div>
+        <div class="question">${escapeHtml(title)}</div>`;
+      if (isMcq) {
+        const selected = state.mcq[q.index];
+        body += `<div class="options">${q.item.options.map(opt => `
+          <button type="button" class="option ${selected === opt.letter ? 'selected' : ''}" data-answer="${opt.letter}">
+            <span class="letter">${opt.letter}</span><p>${escapeHtml(opt.text)}</p>
+          </button>`).join('')}</div>`;
+      } else {
+        const selected = state.likert[q.index];
+        body += `<div class="hint">1=非常不同意，2=不同意，3=不确定/看情况，4=同意，5=非常同意。</div>`;
+        body += `<div class="likert-grid">${[1,2,3,4,5].map(n => `
+          <button type="button" class="option ${selected === n ? 'selected' : ''}" data-answer="${n}">
+            <span class="score-dot">${n}</span><p>${LIKERT_LABELS[n]}</p>
+          </button>`).join('')}</div>`;
+      }
+      body += `
+        <details class="analysis-box">
+          <summary>查看本题测量说明</summary>
+          <p><b>分析：</b>${escapeHtml(q.item.analysis)}</p>
+          <p><b>计分理由：</b>${escapeHtml(q.item.scoringRationale)}</p>
+        </details>
+        <div class="navline">
+          <div class="btns">
+            <button class="btn ghost" type="button" id="prevBtn" ${currentIndex===0?'disabled':''}>上一题</button>
+            <button class="btn primary" type="button" id="nextBtn">${currentIndex===TOTAL-1?'完成并生成报告':'下一题'}</button>
+          </div>
+          <div class="btns">
+            <button class="btn ghost" type="button" id="firstUnansweredBtn">跳到未答题</button>
+            <button class="btn ghost" type="button" id="reportBtn">生成报告</button>
+          </div>
+        </div>`;
+      $('questionCard').innerHTML = body;
+      $('questionCard').querySelectorAll('[data-answer]').forEach(btn => btn.addEventListener('click', () => {
+        if (isMcq) state.mcq[q.index] = btn.dataset.answer;
+        else state.likert[q.index] = Number(btn.dataset.answer);
+        saveState();
+        renderTest();
+      }));
+      $('prevBtn').addEventListener('click', () => { currentIndex = Math.max(0, currentIndex - 1); renderTest(); });
+      $('nextBtn').addEventListener('click', () => {
+        if (currentIndex === TOTAL - 1) return showReport();
+        currentIndex += 1; renderTest();
+      });
+      $('firstUnansweredBtn').addEventListener('click', () => {
+        const idx = firstUnansweredIndex();
+        if (idx === -1) toast('所有题目都已作答'); else { currentIndex = idx; renderTest(); }
+      });
+      $('reportBtn').addEventListener('click', showReport);
+    }
+    function firstUnansweredIndex() {
+      const m = state.mcq.findIndex(v => v === null); if (m !== -1) return m;
+      const l = state.likert.findIndex(v => v === null); if (l !== -1) return DATA.mcqItems.length + l;
+      return -1;
+    }
+
+    function zeroMap() { return Object.fromEntries(DIM_KEYS.map(d => [d, 0])); }
+    function clamp(x, lo=-1, hi=1) { return Math.max(lo, Math.min(hi, x)); }
+    function mean(profile, dims) { return dims.reduce((a,d)=>a+profile[d],0)/dims.length; }
+    function mcqRanges() {
+      const baseline = zeroMap(), maxPos = zeroMap(), maxNeg = zeroMap();
+      for (const item of DATA.mcqItems) {
+        for (const d of DIM_KEYS) {
+          const vals = item.options.map(o => o.scores[d] || 0);
+          const m = vals.reduce((a,b)=>a+b,0) / vals.length;
+          baseline[d] += m;
+          maxPos[d] += Math.max(...vals) - m;
+          maxNeg[d] += m - Math.min(...vals);
+        }
+      }
+      return {baseline, maxPos, maxNeg};
+    }
+    function scoreMcq(answers) {
+      const raw = zeroMap();
+      const ranges = mcqRanges();
+      const trace = [];
+      DATA.mcqItems.forEach((item, i) => {
+        const ans = answers[i];
+        const opt = item.options.find(o => o.letter === ans);
+        if (!opt) throw new Error(`${item.id} 缺少答案`);
+        trace.push({id:item.id, answer:ans, text:opt.text, scores:opt.scores});
+        Object.entries(opt.scores).forEach(([d,v]) => raw[d] += v);
+      });
+      const centered = zeroMap(), unit = zeroMap(), profile = zeroMap();
+      for (const d of DIM_KEYS) {
+        centered[d] = raw[d] - ranges.baseline[d];
+        const denom = Math.max(ranges.maxPos[d], ranges.maxNeg[d]);
+        unit[d] = denom > 0 ? clamp(centered[d]/denom) : 0;
+        profile[d] = 50 + 50 * unit[d];
+      }
+      return {raw, baseline:ranges.baseline, centered, unit, profile, maxPos:ranges.maxPos, maxNeg:ranges.maxNeg, trace};
+    }
+    function likertRanges() {
+      const maxAbs = zeroMap();
+      for (const item of DATA.likertItems) Object.entries(item.scores).forEach(([d,w]) => maxAbs[d] += Math.abs(w));
+      return maxAbs;
+    }
+    function scoreLikert(answers) {
+      const raw = zeroMap();
+      const maxAbs = likertRanges();
+      const trace = [];
+      DATA.likertItems.forEach((item, i) => {
+        const ans = answers[i];
+        if (![1,2,3,4,5].includes(ans)) throw new Error(`${item.id} 缺少评分`);
+        const centeredAnswer = (ans - 3) / 2;
+        trace.push({id:item.id, answer:ans, centeredAnswer, statement:item.statement, scores:item.scores});
+        Object.entries(item.scores).forEach(([d,w]) => raw[d] += centeredAnswer * w);
+      });
+      const unit = zeroMap(), profile = zeroMap();
+      for (const d of DIM_KEYS) {
+        unit[d] = maxAbs[d] > 0 ? clamp(raw[d]/maxAbs[d]) : 0;
+        profile[d] = 50 + 50 * unit[d];
+      }
+      return {raw, maxAbs, unit, profile, trace};
+    }
+    function combineScores(mcq, likert, mcqWeight=0.45, likertWeight=0.55) {
+      const unit = zeroMap(), profile = zeroMap();
+      for (const d of DIM_KEYS) {
+        const wm = Math.max(mcq.maxPos[d], mcq.maxNeg[d]) > 0 ? mcqWeight : 0;
+        const wl = likert.maxAbs[d] > 0 ? likertWeight : 0;
+        const total = wm + wl;
+        unit[d] = total > 0 ? clamp((wm * mcq.unit[d] + wl * likert.unit[d]) / total) : 0;
+        profile[d] = 50 + 50 * unit[d];
+      }
+      return {unit, profile, mcqWeight, likertWeight};
+    }
+    function coverageReport() {
+      const out = Object.fromEntries(DIM_KEYS.map(d => [d, {mcqItems:0, likertItems:0, totalItems:0, mcqAbs:0, likertAbs:0}]));
+      for (const item of DATA.mcqItems) {
+        for (const d of DIM_KEYS) {
+          const vals = item.options.map(o => o.scores[d] || 0);
+          const maxv = Math.max(...vals);
+          if (maxv > 0) { out[d].mcqItems += 1; out[d].mcqAbs += maxv - vals.reduce((a,b)=>a+b,0)/4; }
+        }
+      }
+      for (const item of DATA.likertItems) Object.entries(item.scores).forEach(([d,v]) => { out[d].likertItems += 1; out[d].likertAbs += Math.abs(v); });
+      for (const d of DIM_KEYS) out[d].totalItems = out[d].mcqItems + out[d].likertItems;
+      return out;
+    }
+    function coverageLevel(n) { return n >= 14 ? '较高覆盖' : n >= 10 ? '中等覆盖' : n >= 6 ? '有限覆盖' : '覆盖不足'; }
+    function level(value) { return value >= 75 ? '高' : value >= 60 ? '中高' : value >= 40 ? '中间' : value >= 25 ? '中低' : '低'; }
+    function levelClass(value) { return value >= 75 ? 'high' : value < 40 ? 'low' : ''; }
+    function reliabilityWeight(d, coverage) { const info = coverage[d].mcqAbs + coverage[d].likertAbs; const cf = Math.min(1, coverage[d].totalItems/12); return Math.sqrt(Math.max(info,0))*cf; }
+    function weightedSimilarity(profile, arch, coverage) {
+      let sq=0, tw=0; for (const d of DIM_KEYS) { const w = reliabilityWeight(d, coverage); sq += w * Math.pow(profile[d] - arch[d], 2); tw += w; }
+      if (tw <= 0) return 0; const rms = Math.sqrt(sq/tw); return Math.max(0, 100 * (1 - rms / 100));
+    }
+    function theoryMatches(profile, coverage) {
+      return Object.entries(DATA.archetypes).map(([name, arch]) => [name, weightedSimilarity(profile, arch, coverage)]).sort((a,b)=>b[1]-a[1]);
+    }
+    function derivedIndices(p) { return {
+      '福利计算强度': mean(p, ['CON','AGG']),
+      '权利/同意约束强度': mean(p, ['DNT','AUT','INT']),
+      '最差者/严重性保护': mean(p, ['PRI','SEV']),
+      '程序/责任秩序': mean(p, ['EQL','DES']),
+      '特殊义务/关系权重': p.PAR,
+      '体验实在与主观时间': mean(p, ['EXP','TIM']),
+      '记忆/叙事/后果依赖': mean(p, ['REC','NAR','OUT']),
+      '身份连续性权重': p.IDN,
+      '尾部风险谨慎': p.RSK,
+      '创造主体谨慎': p.POP
+    }; }
+    function contrastIndices(p) { return {
+      '结果压倒 ↔ 权利约束': p.CON - mean(p, ['DNT','AUT','INT']),
+      '跨主体聚合 ↔ 严重性优先': p.AGG - mean(p, ['PRI','SEV']),
+      '体验本身 ↔ 记忆叙事后果': mean(p, ['EXP','TIM']) - mean(p, ['REC','NAR','OUT']),
+      '期望值行动 ↔ 尾部风险谨慎': p.CON - p.RSK,
+      '总体扩张 ↔ 创造谨慎': mean(p, ['CON','AGG']) - p.POP,
+      '非人格化计算 ↔ 特殊关系': mean(p, ['CON','AGG']) - p.PAR
+    }; }
+    function contrastLabel(name, value) { if (Math.abs(value) < 8) return '两侧接近'; const [l,r] = name.split('↔').map(s=>s.trim()); return value > 0 ? `偏向${l}` : `偏向${r}`; }
+    function interpretProfileSentence(p) {
+      const rights = mean(p, ['DNT','AUT','INT']), welfare = mean(p, ['CON','AGG']), severe = mean(p, ['PRI','SEV','RSK']), experience = mean(p, ['EXP','TIM']), narrative = mean(p, ['REC','NAR','OUT']);
+      const clauses = [];
+      if (welfare - rights >= 15) clauses.push('更偏向用总体结果来解决冲突');
+      else if (rights - welfare >= 15) clauses.push('更偏向先设定权利、同意和手段边界');
+      else clauses.push('在总体结果与权利/同意约束之间较均衡');
+      if (severe >= 70) clauses.push('对最差者、极端痛苦或尾部灾难有很强保护倾向');
+      else if (severe <= 40) clauses.push('较少给极端负担或尾部风险额外权重');
+      if (experience - narrative >= 15) clauses.push('明显承认体验发生本身和主观时间的独立道德重量');
+      else if (narrative - experience >= 15) clauses.push('更依赖记忆、叙事整合和后续影响来评估福利');
+      else clauses.push('在体验实在论与叙事/后果依赖之间较均衡');
+      if (p.POP >= 70) clauses.push('对创造新主体持较强谨慎态度');
+      else if (p.POP <= 40) clauses.push('更容易接受净正福利的新主体创造理由');
+      return clauses.join('；') + '。';
+    }
+    function generateNotes(p) {
+      const notes = [];
+      if (p.CON >= 70 && p.DNT >= 65) notes.push('你同时保留强总体后果考虑与强权利约束，接近阈值义务论：通常尊重边界，但灾难性后果可能触发例外。');
+      if (p.CON >= 70 && p.AGG >= 70 && mean(p, ['DNT','AUT','INT']) <= 50) notes.push('你的冲突解法较接近非人格化总量计算：人数、时长和总体验量会强烈推动判断。');
+      if (p.AGG >= 70 && p.SEV <= 45 && p.PRI <= 50) notes.push('你呈现较强聚合主义：多人的较小痛苦较容易相加压倒单个个体的严重痛苦。');
+      if (p.SEV >= 70 && p.AGG <= 50) notes.push('你呈现弱聚合或反聚合倾向：极端强度、极长持续或最大负担对你有额外坏处。');
+      if (p.PRI >= 70 && p.SEV >= 70) notes.push('你不只是关心总量，也很重视“谁会落到最糟状态”以及单个主体最大负担。');
+      if (p.EXP >= 70 && p.TIM >= 70 && Math.max(p.REC, p.NAR, p.OUT) <= 55) notes.push('你强烈承认主观体验本身：即使失忆、无人知道、外部只过一瞬间，经历仍然算数。');
+      if (Math.max(p.REC, p.NAR, p.OUT) >= 70 && p.EXP <= 50) notes.push('你更接近记忆/叙事/后果依赖的福利观：经历是否被记住、整合或留下后果对你非常关键。');
+      if (p.AUT >= 75 && p.DNT >= 60) notes.push('你高度重视自主和同意，倾向认为未经同意的伤害很难被总体利益直接正当化。');
+      if (p.INT >= 70) notes.push('你明显重视意图、手段和行动方式；把人作为工具、欺骗、主动造成伤害会显著改变判断。');
+      if (p.EQL >= 70) notes.push('你重视程序正当性和负担分配公平，倾向反对由决策者任意指定牺牲对象。');
+      if (p.DES >= 70) notes.push('你重视责任、承诺和应得，倾向让造成风险或承诺过的人承担更多负担。');
+      if (p.RSK >= 70) notes.push('你对灾难尾部风险较敏感，尤其在模型不确定或制度可能滥用时会提高谨慎权重。');
+      if (p.POP >= 70) notes.push('你对创造新主体较谨慎，倾向优先考虑已存在主体、生活计划和无法同意被创造的问题。');
+      if (p.PAR >= 70) notes.push('你承认明显的行动者相对性：自己、亲近者、承诺对象或角色职责会获得额外权重。');
+      if (!notes.length) notes.push('你的结果较均衡，没有单一维度极端突出；更适合解释为混合型规范判断结构。');
+      return notes;
+    }
+    function stdev(arr) { const m=arr.reduce((a,b)=>a+b,0)/arr.length; return Math.sqrt(arr.reduce((s,x)=>s+(x-m)*(x-m),0)/arr.length); }
+    function mcqLikertDivergences(mcq, likert, threshold=18) {
+      return DIM_KEYS.map(d => [d, mcq.profile[d], likert.profile[d], Math.abs(mcq.profile[d]-likert.profile[d])]).filter(x=>x[3] >= threshold).sort((a,b)=>b[3]-a[3]);
+    }
+    function responseQualityNotes(mcqAnswers, likertAnswers, mcq, likert) {
+      const notes = [];
+      const counts = {A:0,B:0,C:0,D:0}; mcqAnswers.forEach(a => counts[a]++);
+      if (Math.max(...Object.values(counts)) >= Math.floor(0.75 * mcqAnswers.length)) notes.push('四选一答案高度集中在同一个字母，可能存在答题风格偏差。');
+      const sd = stdev(likertAnswers); const m = likertAnswers.reduce((a,b)=>a+b,0)/likertAnswers.length;
+      if (sd < 0.55) notes.push('1~5 评分题离散度很低，结果可能更多反映保守作答风格而非真实维度差异。');
+      if (m >= 4.4) notes.push('1~5 评分题整体偏同意，可能存在赞同倾向；请更多关注四选一冲突题。');
+      if (m <= 1.6) notes.push('1~5 评分题整体偏反对，可能存在反向作答倾向；请更多关注四选一冲突题。');
+      if (likertAnswers.filter(x=>x===3).length >= 0.65 * likertAnswers.length) notes.push('评分题大量选择 3，报告会更依赖四选一结果；这可能代表真实不确定，也可能代表回避判断。');
+      const divs = mcqLikertDivergences(mcq, likert, 25);
+      if (divs.length) notes.push('四选一与评分题在若干维度差距较大：' + divs.slice(0,4).map(([d,m,l]) => `${d}(MCQ ${m.toFixed(0)}/评分 ${l.toFixed(0)})`).join('，') + '。这通常表示“冲突时优先级”与“原则认同”不同。');
+      return notes;
+    }
+    function familyScores(mcqAnswers) {
+      const byId = Object.fromEntries(DATA.mcqItems.map(it => [it.id, it]));
+      const ansById = Object.fromEntries(DATA.mcqItems.map((it, i) => [it.id, mcqAnswers[i]]));
+      return Object.entries(DATA.itemGroups).map(([group, ids]) => {
+        const totals = zeroMap(), letters = {A:0,B:0,C:0,D:0}; let used = 0;
+        ids.forEach(id => { const item = byId[id]; const ans = ansById[id]; const opt = item.options.find(o=>o.letter===ans); letters[ans]++; used++; Object.entries(opt.scores).forEach(([d,v])=>totals[d]+=v); });
+        const top = Object.entries(totals).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        return {group, items:used, top, letters};
+      });
+    }
+    function computeReport() {
+      const missing = incompleteCount();
+      if (missing) throw new Error(`还有 ${missing} 道题未作答。`);
+      const mcq = scoreMcq(state.mcq), likert = scoreLikert(state.likert), combined = combineScores(mcq, likert), coverage = coverageReport();
+      const matches = theoryMatches(combined.profile, coverage);
+      return {mcq, likert, combined, coverage, matches, derived:derivedIndices(combined.profile), contrast:contrastIndices(combined.profile), notes:generateNotes(combined.profile), quality:responseQualityNotes(state.mcq, state.likert, mcq, likert), divs:mcqLikertDivergences(mcq, likert), families:familyScores(state.mcq)};
+    }
+    function showReport() {
+      const missing = incompleteCount();
+      if (missing) {
+        const idx = firstUnansweredIndex();
+        toast(`还有 ${missing} 道题未答，已跳到第一道未答题`);
+        currentIndex = idx; renderTest(); show('testView'); return;
+      }
+      const r = computeReport();
+      $('reportView').innerHTML = reportHtml(r);
+      show('reportView');
+      bindReportButtons(r);
+    }
+    function reportHtml(r) {
+      const p = r.combined.profile;
+      const sortedDims = DIM_KEYS.slice().sort((a,b)=>p[b]-p[a]);
+      const topDims = sortedDims.slice(0,5).map(d=>`${d} ${p[d].toFixed(1)}`).join(' · ');
+      const topMatch = r.matches[0];
+      const now = new Date().toLocaleString('zh-CN');
+      return `
+        <section class="panel report-head">
+          <div class="report-title">
+            <div class="pill">生成时间：${escapeHtml(now)}</div>
+            <h2>TAMIS-3.1 测试报告</h2>
+            <p class="hint">${escapeHtml(DATA.meta.notice)}</p>
+          </div>
+          <div class="btns">
+            <button class="btn primary" id="downloadReportBtn" type="button">下载 HTML 报告</button>
+            <button class="btn ghost" id="downloadJsonBtn" type="button">下载答题 JSON</button>
+            <button class="btn ghost" id="printBtn" type="button">打印 / 保存 PDF</button>
+            <button class="btn ghost" id="backToTestBtn" type="button">返回修改</button>
+          </div>
+        </section>
+        <section class="summary">
+          <div class="stat"><b>${DATA.mcqItems.length + DATA.likertItems.length}</b><span>已完成题数</span></div>
+          <div class="stat"><b>${topMatch[1].toFixed(1)}</b><span>最高原型相似度：${escapeHtml(topMatch[0])}</span></div>
+          <div class="stat"><b>${topDims}</b><span>最高维度 Top 5</span></div>
+          <div class="stat"><b>${r.divs.length}</b><span>MCQ/评分分歧 ≥18 的维度数</span></div>
+        </section>
+        <section class="panel"><h3>总述</h3><p class="hint" style="font-size:16px;">${escapeHtml(interpretProfileSentence(p))}</p></section>
+        <section class="panel"><h3>维度得分</h3>${dimensionTable(r, sortedDims)}</section>
+        <section class="panel"><h3>派生画像指数</h3><div class="cards">${Object.entries(r.derived).map(([name,val])=>metricHtml(name,val)).join('')}</div></section>
+        <section class="panel"><h3>关键取向对比</h3>${Object.entries(r.contrast).map(([name,val])=>contrastHtml(name,val)).join('')}</section>
+        <section class="panel"><h3>最接近的理论原型</h3><div class="list">${r.matches.slice(0,7).map(([name,sim],i)=>`<div class="list-item"><b>${i+1}. ${escapeHtml(name)}</b><br><span class="hint">相似度：${sim.toFixed(1)}（${sim>=70?'较接近':sim>=60?'中等接近':'弱接近'}）</span></div>`).join('')}</div><p class="hint">相似度来自维度空间的加权距离；原型是人工设定的解释性画像，不代表你“属于”某个学派。</p></section>
+        <section class="panel"><h3>解释要点</h3><div class="list">${r.notes.map(n=>`<div class="list-item">${escapeHtml(n)}</div>`).join('')}</div></section>
+        <section class="panel"><h3>题组画像</h3><div class="list">${r.families.map(f=>`<div class="list-item"><b>${escapeHtml(f.group)}</b><br><span class="hint">题数 ${f.items}；选项分布 A:${f.letters.A||0} B:${f.letters.B||0} C:${f.letters.C||0} D:${f.letters.D||0}；激活维度：${f.top.map(([d,v])=>`${d}:${num(v)}`).join('，') || '无明显维度'}</span></div>`).join('')}</div></section>
+        ${r.divs.length ? `<section class="panel"><h3>MCQ 与评分题分歧最大的维度</h3><div class="list">${r.divs.slice(0,8).map(([d,m,l,diff])=>`<div class="list-item"><b>${d} ${escapeHtml(DIM_NAME[d])}</b><br><span class="hint">四选一 ${m.toFixed(1)} / 评分 ${l.toFixed(1)} / 差距 ${diff.toFixed(1)}</span></div>`).join('')}</div><p class="hint">这些差异常常表示：你在抽象原则上同意某点，但在冲突情境中未必把它排在第一位，或反过来。</p></section>` : ''}
+        ${r.quality.length ? `<section class="panel"><h3>作答质量与解释提示</h3><div class="list">${r.quality.map(n=>`<div class="list-item">${escapeHtml(n)}</div>`).join('')}</div></section>` : ''}
+        <section class="panel"><h3>覆盖与解释置信度</h3>${coverageTable(r.coverage)}</section>
+        <section class="panel"><h3>答题回顾</h3><details><summary>展开每题答案、测量分析和计分理由</summary><div class="answer-review" style="margin-top:14px;">${answerReviewHtml()}</div></details></section>
+        <section class="panel"><h3>v3.1 修订说明</h3><div class="list">${DATA.revisionSummary.map(n=>`<div class="list-item">${escapeHtml(n)}</div>`).join('')}</div></section>`;
+    }
+    function dimensionTable(r, dims) {
+      return `<table class="dim-table"><thead><tr><th>维度</th><th>合并分数</th><th>MCQ</th><th>评分</th><th>覆盖</th><th>解释</th></tr></thead><tbody>${dims.map(d => {
+        const v = r.combined.profile[d], m = r.mcq.profile[d], l = r.likert.profile[d], c = r.coverage[d], diverge = Math.abs(m-l)>=25;
+        return `<tr><td><span class="code">${d}</span><br>${escapeHtml(DIM_NAME[d])}</td><td><span class="num">${v.toFixed(1)}</span> <span class="level ${levelClass(v)}">${level(v)}</span><div class="barline"><i style="width:${v}%"></i></div>${diverge?'<div class="hint">⚠ MCQ/评分分歧</div>':''}</td><td class="num">${m.toFixed(1)}</td><td class="num">${l.toFixed(1)}</td><td>${c.totalItems} 题<br><span class="hint">范围 ${(c.mcqAbs+c.likertAbs).toFixed(2)} · ${coverageLevel(c.totalItems)}</span></td><td class="hint">${escapeHtml(DATA.dimensionDescriptions[d])}</td></tr>`;
+      }).join('')}</tbody></table>`;
+    }
+    function coverageTable(cov) {
+      return `<table class="dim-table"><thead><tr><th>维度</th><th>题项覆盖</th><th>信息范围</th><th>提示</th></tr></thead><tbody>${DIM_KEYS.map(d => { const c=cov[d]; const info=c.mcqAbs+c.likertAbs; return `<tr><td><span class="code">${d}</span> ${escapeHtml(DIM_NAME[d])}</td><td>总计 ${c.totalItems} 题<br><span class="hint">MCQ ${c.mcqItems}；评分 ${c.likertItems}</span></td><td class="num">${info.toFixed(2)}</td><td>${coverageLevel(c.totalItems)}</td></tr>`; }).join('')}</tbody></table>`;
+    }
+    function metricHtml(name, val) { return `<div class="metric"><div class="name">${escapeHtml(name)}</div><span class="num">${val.toFixed(1)}</span> <span class="level ${levelClass(val)}">${level(val)}</span><div class="barline"><i style="width:${val}%"></i></div></div>`; }
+    function contrastHtml(name, val) {
+      const mag = Math.min(100, Math.abs(val));
+      const style = val >= 0 ? `left:50%;width:${mag/2}%;` : `right:50%;width:${mag/2}%;`;
+      return `<div class="contrast"><div><b>${escapeHtml(name)}</b><br><span class="hint">${val>=0?'+':''}${val.toFixed(1)} · ${escapeHtml(contrastLabel(name,val))}</span></div><div class="signed"><i style="${style}"></i></div></div>`;
+    }
+    function answerReviewHtml() {
+      const a = [];
+      DATA.mcqItems.forEach((item, i) => { const ans = state.mcq[i]; const opt = item.options.find(o=>o.letter===ans); a.push(`<div class="review-item"><strong>${item.id} ${escapeHtml(item.prompt)}</strong><small>你的选择：${ans}. ${escapeHtml(opt.text)}</small><small>分析：${escapeHtml(item.analysis)}</small><small>计分理由：${escapeHtml(item.scoringRationale)}</small></div>`); });
+      DATA.likertItems.forEach((item, i) => { const ans = state.likert[i]; a.push(`<div class="review-item"><strong>${item.id} ${escapeHtml(item.statement)}</strong><small>你的评分：${ans}（${LIKERT_LABELS[ans]}）</small><small>分析：${escapeHtml(item.analysis)}</small><small>计分理由：${escapeHtml(item.scoringRationale)}</small></div>`); });
+      return a.join('');
+    }
+    function bindReportButtons(r) {
+      $('downloadReportBtn').addEventListener('click', () => downloadReportHtml(r));
+      $('downloadJsonBtn').addEventListener('click', () => downloadJson(r));
+      $('printBtn').addEventListener('click', () => window.print());
+      $('backToTestBtn').addEventListener('click', () => { show('testView'); renderTest(); });
+    }
+    function downloadReportHtml(r) {
+      const content = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TAMIS-3.1 测试报告</title><style>${document.querySelector('style').textContent}</style></head><body><div class="app"><main class="report">${$('reportView').innerHTML.replace(/<div class="btns">[\s\S]*?<\/div>/,'')}</main></div></body></html>`;
+      downloadBlob(content, `TAMIS-3.1-测试报告-${dateStamp()}.html`, 'text/html;charset=utf-8');
+    }
+    function downloadJson(r) {
+      const payload = { generatedAt: new Date().toISOString(), source: DATA.meta.source, answers: {mcq: state.mcq, likert: state.likert}, report: r };
+      downloadBlob(JSON.stringify(payload, null, 2), `TAMIS-3.1-答题数据-${dateStamp()}.json`, 'application/json;charset=utf-8');
+    }
+    function downloadBlob(content, filename, type) {
+      const blob = new Blob([content], {type}); const url = URL.createObjectURL(blob); const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast('已开始下载');
+    }
+    function dateStamp() { const d = new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${String(d.getHours()).padStart(2,'0')}${String(d.getMinutes()).padStart(2,'0')}`; }
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+    function num(x) { return Number.isInteger(x) ? String(x) : Number(x).toFixed(1).replace(/\.0$/,''); }
+
+    $('startBtn').addEventListener('click', () => { show('testView'); renderTest(); });
+    $('homeBtn').addEventListener('click', () => show('introView'));
+    $('reportTopBtn').addEventListener('click', showReport);
+    $('resetBtn').addEventListener('click', () => {
+      if (confirm('确定清空当前浏览器中保存的所有答案吗？')) { state = defaultState(); currentIndex = 0; localStorage.removeItem(STORAGE_KEY); updateSaveStatus(); toast('进度已清空'); show('introView'); }
+    });
+    $('mcqTab').addEventListener('click', () => { currentIndex = 0; renderTest(); });
+    $('likertTab').addEventListener('click', () => { currentIndex = DATA.mcqItems.length; renderTest(); });
+    $('demoBtn').addEventListener('click', () => {
+      const letters = ['A','B','C','D'];
+      state.mcq = state.mcq.map(()=>letters[Math.floor(Math.random()*4)]);
+      state.likert = state.likert.map(()=>1+Math.floor(Math.random()*5));
+      saveState(); toast('已生成随机演示答案'); showReport();
+    });
+    document.addEventListener('keydown', (e) => {
+      if ($('testView').classList.contains('hidden')) return;
+      const q = qAt(currentIndex);
+      if (q.kind === 'mcq' && ['a','b','c','d'].includes(e.key.toLowerCase())) { state.mcq[q.index] = e.key.toUpperCase(); saveState(); renderTest(); }
+      if (q.kind === 'likert' && ['1','2','3','4','5'].includes(e.key)) { state.likert[q.index] = Number(e.key); saveState(); renderTest(); }
+      if (e.key === 'ArrowLeft') { currentIndex = Math.max(0, currentIndex-1); renderTest(); }
+      if (e.key === 'ArrowRight') { currentIndex = Math.min(TOTAL-1, currentIndex+1); renderTest(); }
+    });
+    initIntro();
+  </script>
+</body>
+</html>
